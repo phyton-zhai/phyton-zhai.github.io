@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于植格 — Phyton</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ============================================================
+           全局 — 科技白左风
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Inter', 'Helvetica Neue', 'Segoe UI', Roboto, sans-serif;
+            background: #f7f6f3;
+            color: #1e1e1e;
+            line-height: 1.8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== 顶部导航 — 轻量毛玻璃 ===== */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px) saturate(1.2);
+            -webkit-backdrop-filter: blur(18px) saturate(1.2);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.8rem;
+            font-weight: 450;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #3a3a3a;
+            text-decoration: none;
+            transition: color 0.25s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: #1a1a1a;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #000;
+        }
+
+        .has-dropdown {
+            position: relative;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+            min-width: 200px;
+            padding: 0.5rem 0;
+        }
+
+        .has-dropdown:hover .dropdown {
+            display: block;
+        }
+
+        .dropdown-inner {
+            padding: 0.5rem 1rem;
+        }
+
+        /* ===== 主内容 — 宽幅阅读 ===== */
+        .about-page {
+            max-width: 780px;
+            margin: 3.5rem auto 2rem;
+            padding: 0 2rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .about-page h1 {
+            font-size: 2.4rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 2.8rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        /* ===== 内容区块 ===== */
+        .about-block {
+            margin-bottom: 3.2rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .about-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .about-block h2 {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            color: #1a1a1a;
+            margin-bottom: 1.2rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .about-block p {
+            font-size: 1rem;
+            color: #3a3a3a;
+            margin-bottom: 1.2rem;
+            line-height: 1.9;
+        }
+
+        .about-block p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ===== 页脚 ===== */
+        .site-footer {
+            text-align: center;
+            padding: 2.8rem 2rem 2.2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            margin-top: 2.5rem;
+            background: #fcfcfb;
+        }
+
+        .footer-slogan {
+            font-size: 1rem;
+            font-weight: 380;
+            letter-spacing: 3px;
+            color: #1a1a1a;
+            margin-bottom: 0.2rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .footer-sub {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: #b8b3ab;
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-copy {
+            font-size: 0.7rem;
+            color: #ccc7bf;
+            letter-spacing: 1px;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 700px) {
+            .top-nav {
+                padding: 0 1rem;
+            }
+            .nav-menu {
+                gap: 1.2rem;
+            }
+            .nav-link {
+                font-size: 0.7rem;
+                letter-spacing: 0.5px;
+            }
+            .nav-logo {
+                font-size: 1.1rem;
+                letter-spacing: 2px;
+            }
+            .about-page {
+                padding: 0 1.2rem;
+                margin: 2rem auto 1rem;
+            }
+            .about-page h1 {
+                font-size: 1.8rem;
+                letter-spacing: 2px;
+                margin-bottom: 2rem;
+            }
+            .about-block h2 {
+                font-size: 1rem;
+            }
+            .about-block p {
+                font-size: 0.95rem;
+            }
+            .footer-slogan {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .nav-menu {
+                gap: 0.8rem;
+            }
+            .nav-link {
+                font-size: 0.6rem;
+                letter-spacing: 0.3px;
+            }
+            .nav-logo {
+                font-size: 0.95rem;
+            }
+            .about-page {
+                padding: 0 1rem;
+                margin: 1.5rem auto 0.5rem;
+            }
+            .about-page h1 {
+                font-size: 1.5rem;
+            }
+            .about-block {
+                margin-bottom: 2rem;
+                padding-bottom: 2rem;
+            }
+            .about-block p {
+                font-size: 0.88rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">植格</a>
+            <ul class="nav-menu">
+                <li class="nav-item has-dropdown">
+                    <a href="#" class="nav-link">产品目录</a>
+                    <div class="dropdown" id="productDropdown">
+                        <div class="dropdown-inner">
+                            <p style="color:var(--muted);text-align:center;padding:1rem;">加载中…</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item"><a href="auction.html" class="nav-link">竞拍规则</a></li>
+                <li class="nav-item"><a href="institutional-inquiry.html" class="nav-link">机构咨询</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">关于植格</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="about-page">
+        <h1>关于植格</h1>
+
+        <section class="about-block">
+            <h2>植格是什么</h2>
+            <p>植格是一套植物数字孪生参数引擎。它不拟合历史数据，不依赖田间传感器，不需要人工调参。我们只做一件事：为植物定义生理属性的物理边界，然后让它在真实天气中自己求解生存策略。</p>
+            <p>每一组参数，都是植物自己在逐小时气象数据中活出来的结果。我们只是把它记录下来，交给你。</p>
+        </section>
+
+        <section class="about-block">
+            <h2>为什么植格不同</h2>
+            <p>传统农业模型依赖大量田间试验校准参数，一个产区一个作物需要数年验证，品种更换后需重新来过。模型是工具，需要专业团队操作。</p>
+            <p>植格选择另一条路径。植物自己决定何时需要水、何时需要肥、何时该停止生长。人类从决策中心移走，变成边界设定者和结果记录者。单产区十五分钟求解，跨物种跨产区泛化，品种微调在容忍阈值内。</p>
+            <p>交付即终点——你获得参数所有权，自行集成。我们交付的是植物自己在真实天气中活出来的生存策略，不需要你成为专家才能使用，但你需要自己承担决策责任。</p>
+        </section>
+
+        <section class="about-block">
+            <h2>数据来源与合规声明</h2>
+            <p>植格参数引擎所使用的一切数据均来自全球公开可获取的科学数据源。气象数据来自ECMWF ERA5全球大气再分析数据集，土壤数据来自FAO HWSD全球土壤数据库及各国公开土壤普查资料，植物生理属性基于公开文献由植格引擎自主推演。</p>
+            <p>植格参数包是基于公开数据的科学推演结果，不包含任何国家机密、商业秘密或个人隐私数据。买方应自行评估本参数包在其具体应用场景中的适用性，并承担相应决策责任。</p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p class="footer-slogan">万植有格。The Foundation of Digital Plant Life.</p>
+        <p class="footer-sub">Philosopher-Zhai</p>
+        <p class="footer-copy">© 2026 植格 Phyton</p>
+    </footer>
+
+    <script src="js/map.js"></script>
+</body>
+</html>

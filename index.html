@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>植格 Phyton — 植物界的数字孪生基座</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ============================================================
+           全局 — 科技白左风
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, 'Inter', 'Helvetica Neue', 'Segoe UI', Roboto, sans-serif;
+            background: #f7f6f3;
+            color: #1e1e1e;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== 顶部导航 — 毛玻璃 ===== */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px) saturate(1.2);
+            -webkit-backdrop-filter: blur(18px) saturate(1.2);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            padding: 0 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.8rem;
+            font-weight: 450;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #3a3a3a;
+            text-decoration: none;
+            transition: color 0.25s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: #1a1a1a;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #000;
+        }
+
+        .has-dropdown {
+            position: relative;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+            min-width: 200px;
+            padding: 0.5rem 0;
+        }
+
+        .has-dropdown:hover .dropdown {
+            display: block;
+        }
+
+        .dropdown-inner {
+            padding: 0.5rem 1rem;
+        }
+
+        /* ===== 滚动容器 ===== */
+        .scroll-container {
+            padding-top: 64px;
+            padding-bottom: 200px; /* 为固定页脚预留空间 */
+        }
+
+        /* ===== 全屏面板 ===== */
+        .fullscreen-panel {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            width: 100%;
+        }
+
+        /* ============================================================
+           第一屏：英雄区（纯文字，垂直居中）
+           ============================================================ */
+        .hero-panel {
+            background: #f7f6f3;
+            text-align: center;
+            flex-direction: column;
+            position: relative;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        .hero-overlay {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 4.8rem;
+            font-weight: 400;
+            letter-spacing: 12px;
+            color: #1a1a1a;
+            font-family: 'Times New Roman', serif;
+            margin-bottom: 0.6rem;
+            line-height: 1.15;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            font-weight: 350;
+            letter-spacing: 6px;
+            color: #4a4a4a;
+            margin-bottom: 1.6rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .hero-tagline {
+            font-size: 1rem;
+            font-weight: 350;
+            letter-spacing: 3px;
+            color: #8a8a8a;
+            margin-bottom: 2.2rem;
+            font-style: italic;
+        }
+
+        .hero-byline {
+            font-size: 0.8rem;
+            letter-spacing: 5px;
+            color: #b8b3ab;
+            text-transform: uppercase;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem;
+            color: #c5c0b8;
+            animation: bounce-down 2.4s ease-in-out infinite;
+            line-height: 1;
+        }
+
+        @keyframes bounce-down {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+                opacity: 1;
+            }
+        }
+
+        /* ============================================================
+           第二屏：故事卡片（顶部对齐，但足够的内边距保证视觉居中）
+           ============================================================ */
+        .stories-panel {
+            background: #f7f6f3;
+            padding: 5rem 2rem 4rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;   /* 保持顶部对齐，符合您之前的要求 */
+            justify-content: center;
+        }
+
+        .stories-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .stories-heading {
+            font-size: 1.6rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .story-card {
+            background: #ffffff;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            will-change: transform;
+        }
+
+        .story-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.07);
+        }
+
+        .story-img {
+            width: 100%;
+            padding-top: 56.25%;
+            background-size: cover;
+            background-position: center;
+            background-color: #e8e4de;
+            flex-shrink: 0;
+        }
+
+        .story-text {
+            padding: 1.8rem 2rem 2.2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .story-text h3 {
+            font-size: 1.05rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: #1a1a1a;
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .story-tagline {
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            color: #b0aaa2;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .story-desc {
+            font-size: 0.95rem;
+            color: #3a3a3a;
+            line-height: 1.8;
+            flex: 1;
+        }
+
+        /* ============================================================
+           第三屏：全球覆盖（底部内边距已减小，页脚脱离文档流）
+           ============================================================ */
+        .climate-panel {
+            background: #f7f6f3;
+            padding: 5rem 2rem 3rem;   /* 底部内边距减小 */
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .climate-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .climate-heading {
+            font-size: 1.8rem;
+            font-weight: 400;
+            letter-spacing: 5px;
+            color: #1a1a1a;
+            margin-bottom: 2rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .climate-map {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 2rem;
+            border-radius: 18px;
+            background: #e8e4de;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .climate-note {
+            font-size: 0.85rem;
+            color: #8a8a8a;
+            letter-spacing: 1.5px;
+            line-height: 1.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ============================================================
+           页脚 — 固定于视口底部
+           ============================================================ */
+        .site-footer {
+            position: fixed;            /* 固定定位 */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 900;               /* 低于导航栏 */
+            text-align: center;
+            padding: 2rem 2rem 1.6rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(252, 252, 251, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.03);
+        }
+
+        .footer-slogan {
+            font-size: 1rem;
+            font-weight: 380;
+            letter-spacing: 3px;
+            color: #1a1a1a;
+            margin-bottom: 0.2rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .footer-sub {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: #b8b3ab;
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-disclaimer {
+            max-width: 720px;
+            margin: 0 auto 1.2rem;
+            font-size: 0.7rem;
+            color: #bfb9b1;
+            line-height: 1.9;
+            letter-spacing: 0.3px;
+            padding: 0 1rem;
+        }
+
+        .footer-copy {
+            font-size: 0.7rem;
+            color: #ccc7bf;
+            letter-spacing: 1px;
+        }
+
+        /* ============================================================
+           响应式
+           ============================================================ */
+        @media (max-width: 900px) {
+            .story-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .top-nav {
+                padding: 0 1rem;
+            }
+            .nav-menu {
+                gap: 1.2rem;
+            }
+            .nav-link {
+                font-size: 0.7rem;
+                letter-spacing: 0.5px;
+            }
+            .nav-logo {
+                font-size: 1.1rem;
+                letter-spacing: 2px;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+                letter-spacing: 8px;
+            }
+            .hero-subtitle {
+                font-size: 1rem;
+                letter-spacing: 4px;
+            }
+            .hero-tagline {
+                font-size: 0.9rem;
+                letter-spacing: 2px;
+            }
+
+            .stories-panel {
+                padding: 4rem 1.2rem 3rem;
+            }
+            .stories-heading {
+                font-size: 1.3rem;
+                letter-spacing: 2px;
+                margin-bottom: 2rem;
+            }
+            .story-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .story-text {
+                padding: 1.4rem 1.4rem 1.8rem;
+            }
+            .story-text h3 {
+                font-size: 0.95rem;
+            }
+            .story-desc {
+                font-size: 0.88rem;
+            }
+
+            /* 移动端底部留白加大，页脚更高 */
+            .scroll-container {
+                padding-bottom: 230px;
+            }
+
+            .climate-panel {
+                padding: 4rem 1.2rem 2.5rem;
+            }
+            .climate-heading {
+                font-size: 1.4rem;
+                letter-spacing: 3px;
+            }
+            .climate-note {
+                font-size: 0.78rem;
+            }
+
+            .site-footer {
+                padding: 1.6rem 1.2rem 1.4rem;
+            }
+            .footer-slogan {
+                font-size: 0.85rem;
+            }
+            .footer-disclaimer {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .nav-menu {
+                gap: 0.8rem;
+            }
+            .nav-link {
+                font-size: 0.6rem;
+                letter-spacing: 0.3px;
+            }
+            .nav-logo {
+                font-size: 0.95rem;
+            }
+
+            .hero-title {
+                font-size: 2.4rem;
+                letter-spacing: 6px;
+            }
+            .hero-subtitle {
+                font-size: 0.85rem;
+                letter-spacing: 3px;
+            }
+            .hero-tagline {
+                font-size: 0.8rem;
+            }
+
+            .fullscreen-panel {
+                padding: 3rem 1rem;
+                min-height: 90vh;
+            }
+            .stories-panel {
+                min-height: auto;
+                padding: 3rem 1rem 2rem;
+            }
+            .climate-panel {
+                min-height: auto;
+                padding: 3rem 1rem 2rem;
+            }
+
+            .story-text h3 {
+                font-size: 0.9rem;
+            }
+            .story-desc {
+                font-size: 0.82rem;
+            }
+            .story-text {
+                padding: 1rem 1rem 1.4rem;
+            }
+
+            .scroll-hint {
+                font-size: 1.4rem;
+                bottom: 1.2rem;
+            }
+
+            /* 小屏幕底部留白更多 */
+            .scroll-container {
+                padding-bottom: 250px;
+            }
+
+            .site-footer {
+                padding: 1.4rem 1rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 顶部悬浮导航栏 ===== -->
+    <nav class="top-nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">植格</a>
+            <ul class="nav-menu">
+                <li class="nav-item has-dropdown">
+                    <a href="#" class="nav-link">产品目录</a>
+                    <div class="dropdown" id="productDropdown">
+                        <div class="dropdown-inner">
+                            <p style="color:var(--muted);text-align:center;padding:1rem;">加载中…</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="auction.html" class="nav-link">竞拍规则</a>
+                </li>
+                <li class="nav-item">
+                    <a href="institutional-inquiry.html" class="nav-link">机构咨询</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">关于植格</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== 全屏滚动容器 ===== -->
+    <div class="scroll-container">
+
+        <!-- 第一屏：英雄区 -->
+        <section class="fullscreen-panel hero-panel" id="panel1">
+            <div class="hero-overlay">
+                <h1 class="hero-title">万植有格</h1>
+                <p class="hero-subtitle">创造植物界的数字孪生基座</p>
+                <p class="hero-tagline">这不是优化。这是范式转换。</p>
+                <p class="hero-byline">Philosopher-Zhai</p>
+            </div>
+            <div class="scroll-hint">↓</div>
+        </section>
+
+        <!-- 第二屏：三张故事卡片 -->
+        <section class="fullscreen-panel stories-panel" id="panel2">
+            <div class="stories-inner">
+                <h2 class="stories-heading">涌现：植物自己求解的生存策略</h2>
+                <div class="story-grid">
+                    <div class="story-card">
+                        <div class="story-img" style="background-image: url('images/story_black_soil.jpg');"></div>
+                        <div class="story-text">
+                            <h3>黑土区冬小麦的零干预策略</h3>
+                            <p class="story-tagline">当最优解是不作为</p>
+                            <p class="story-desc">乌克兰黑土区有机质含量高达8%-15%。植格引擎在四年回测中涌现的策略是：不灌溉、不追肥。在这片土地上，任何人为干预都是多余的。</p>
+                        </div>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-img" style="background-image: url('images/story_disaster.jpg');"></div>
+                        <div class="story-text">
+                            <h3>灾害气候下的理性止损</h3>
+                            <p class="story-tagline">减少无效投入的逆向决策</p>
+                            <p class="story-desc">2018年黑河大豆遭遇低温，传统方案加大水肥投入抢救，最终仍未完熟。植格策略选择了减少投入——代谢慢了，水肥需求自然下降。省下的成本直接转化为净收益。</p>
+                        </div>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-img" style="background-image: url('images/story_senescence.jpg');"></div>
+                        <div class="story-text">
+                            <h3>灌浆期营养器官的程序性衰解</h3>
+                            <p class="story-tagline">一年生植物的终极生存策略</p>
+                            <p class="story-desc">灌浆启动后，植格主动将叶片和茎秆中约15%的储存物质以57%的效率输送给籽粒。这不是病害，不是衰老，是植物在繁殖信号触发下自主执行的程序性营养转移。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第三屏：全球覆盖 -->
+        <section class="fullscreen-panel climate-panel" id="panel3">
+            <div class="climate-inner">
+                <h2 class="climate-heading">全球覆盖</h2>
+                <img src="images/climate_map.png" alt="植格全球覆盖产区示意图" class="climate-map">
+                <p class="climate-note">基于ECMWF全球再分析数据 · 已覆盖九个核心产区 · 跨越六种气候类型 · 跨五个物种</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ===== 页脚（固定底部） ===== -->
+    <footer class="site-footer">
+        <p class="footer-slogan">万植有格。The Foundation of Digital Plant Life.</p>
+        <p class="footer-sub">Philosopher-Zhai</p>
+        <p class="footer-disclaimer">
+            植格参数引擎所使用的一切数据均来自全球公开可获取的科学数据源。气象数据来自ECMWF ERA5，土壤数据来自FAO HWSD及各国公开土壤普查资料，植物生理属性基于公开文献由植格引擎自主推演。本参数包是基于公开数据的科学推演结果，不包含任何国家机密、商业秘密或个人隐私数据。
+        </p>
+        <p class="footer-copy">© 2026 植格 Phyton</p>
+    </footer>
+
+    <script src="js/map.js"></script>
+</body>
+</html>

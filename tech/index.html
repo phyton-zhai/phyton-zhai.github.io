@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Summary — Phyton Plant Digital Twin Engine</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header>
+        <h1><a href="../index.html" style="color:inherit;text-decoration:none;">Phyton</a></h1>
+        <p class="subtitle">Technical Summary</p>
+    </header>
+
+    <main class="institutional">
+        <h2>Phyton Engine: A Non-Gradient, Emergence-Based Approach to Plant Digital Twins</h2>
+
+        <p style="color:var(--muted);font-size:0.9rem;margin-bottom:2rem;">
+            This document provides a technical overview for institutional analysts and technical due diligence teams.
+            It describes the core methodology without disclosing proprietary implementation details.
+        </p>
+
+        <h3>1. Core Differentiator: Emergence vs. Fitting</h3>
+        <p>The global academic and industrial consensus on crop modeling relies on <strong>parametric fitting</strong> — using statistical regression, neural networks, or differential equations calibrated against historical yield data. These models require hundreds of manually tuned parameters and exhibit severe degradation when applied outside their training distribution.</p>
+        <p>Phyton employs a fundamentally different paradigm. We define a bounded <strong>attribute pool</strong> (28–70+ dimensions depending on species complexity) representing the physiologically plausible range of plant survival strategies. A population of digital plant entities is then subjected to <strong>multi-year, hourly-resolution real weather data</strong> (ECMWF ERA5). Through an evolutionary process involving 200 individuals across 200 generations, plants that fail to survive are eliminated, and those that successfully complete their life cycle pass their attributes forward.</p>
+        <p>The result is a set of strategy parameters that were <strong>not fitted, not tuned, and not manually adjusted</strong>. They emerged as the unique survival solution for that specific crop in that specific environment. Each parameter is precise to 8–9 decimal places — a precision level unattainable through manual calibration or statistical fitting.</p>
+
+        <h3>2. Key Technical Properties</h3>
+        <ul style="margin-left:1.5rem;color:var(--muted);line-height:1.8;">
+            <li><strong>Physics-Informed Bounds:</strong> All attribute dimensions are constrained by known physiological limits (e.g., Rubisco enzyme kinetics for C3/C4 photosynthesis, soil hydraulic conductivity for root water uptake).</li>
+            <li><strong>Cross-Species Generalization:</strong> The same engine, without architectural modification, has successfully generated validated parameters for wheat, corn, soybean, peanut, rice, and an invasive annual weed (Erigeron canadensis).</li>
+            <li><strong>Global Coverage Capability:</strong> The engine is driven by ECMWF ERA5 global reanalysis data, enabling parameter generation for any coordinate on Earth with sufficient historical weather records.</li>
+            <li><strong>Extreme Climate Resilience:</strong> Parameters are validated against historical extreme events (drought, flood, late frost, heat-forced maturity) embedded in the training data, not through synthetic scenario generation.</li>
+            <li><strong>Minimal Computational Footprint:</strong> A single crop-region parameter set converges in approximately 15 minutes on consumer-grade CPU hardware (6-core, 12-thread). No GPU acceleration required. No cloud dependency.</li>
+        </ul>
+
+        <h3>3. Validated Coverage (as of July 2026)</h3>
+        <table style="width:100%;border-collapse:collapse;margin-top:1rem;font-size:0.9rem;">
+            <thead>
+                <tr style="border-bottom:1px solid var(--border);">
+                    <th style="text-align:left;padding:0.5rem;">Crop</th>
+                    <th style="text-align:left;padding:0.5rem;">Regions Covered</th>
+                    <th style="text-align:left;padding:0.5rem;">Climate Zones (Köppen)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Winter Wheat</td><td style="padding:0.5rem;">Puyang, Baoding, Nanjing, Kharkiv (Ukraine)</td><td style="padding:0.5rem;">Dwa, Cwa, Dfb</td></tr>
+                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Corn (Maize)</td><td style="padding:0.5rem;">Harbin, Puyang, Nanjing, Des Moines (US)</td><td style="padding:0.5rem;">Dwa, Cwa, Dfa</td></tr>
+                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Soybean</td><td style="padding:0.5rem;">Puyang, Baoding, Nanjing, Cuiabá (Brazil)</td><td style="padding:0.5rem;">Dwa, Cwa, Aw</td></tr>
+                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Peanut</td><td style="padding:0.5rem;">Puyang, Baoding, Nanjing</td><td style="padding:0.5rem;">Dwa, Cwa</td></tr>
+                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Rice</td><td style="padding:0.5rem;">Harbin, Changsha, Guangzhou</td><td style="padding:0.5rem;">Dwa, Cfa, Cwa</td></tr>
+                <tr><td style="padding:0.5rem;">Erigeron canadensis</td><td style="padding:0.5rem;">(Global weed, single representative parameter set)</td><td style="padding:0.5rem;">Dwa</td></tr>
+            </tbody>
+        </table>
+
+        <h3>4. Validation Protocol</h3>
+        <p>Each parameter set undergoes a standardized validation pipeline:</p>
+        <ol style="margin-left:1.5rem;color:var(--muted);line-height:1.8;">
+            <li><strong>Historical Backtest:</strong> 4-year continuous simulation at hourly resolution (≈35,040 hours). Output compared against local standard agricultural practices.</li>
+            <li><strong>Extreme Climate Stress Test:</strong> Identification and replay of extreme weather periods within the training data (drought years, flood years, late frost events).</li>
+            <li><strong>Cross-Region Consistency Check:</strong> Parameter sets for the same crop across different regions are compared to verify that regional differences are attributable to environmental variables rather than model instability.</li>
+            <li><strong>Open-Source Verification Script:</strong> A universal backtest script (Python) is provided for independent third-party validation. Buyers can verify all claimed results using their own weather data.</li>
+        </ol>
+
+        <h3>5. Intellectual Property & Data Sources</h3>
+        <p>All input data (ECMWF ERA5, FAO HWSD) are publicly and legally accessible global datasets. The Phyton engine and all generated parameter sets are original intellectual property. No classified, proprietary, or personally identifiable data is used at any stage of the pipeline.</p>
+
+        <h3>6. Contact for Technical Due Diligence</h3>
+        <p>Qualified institutional investors may request a more detailed technical briefing under NDA. Please use the <a href="../institutional-inquiry.html">Institutional Inquiry</a> channel.</p>
+
+        <p style="margin-top:3rem;font-size:0.8rem;color:var(--light-muted);">
+            This document is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or asset.
+        </p>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="../index.html">← 返回首页</a>
+            <a href="../institutional-inquiry.html">Institutional Inquiry</a>
+        </div>
+        <p>万植有格。The Foundation of Digital Plant Life.</p>
+        <p style="margin-top:0.5rem;">© 2026 Phyton</p>
+    </footer>
+</body>
+</html>
