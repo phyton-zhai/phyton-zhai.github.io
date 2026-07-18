@@ -626,3 +626,11 @@ body {
         gap: 1rem;
     }
 }
+/* 手机端下拉菜单可滚动 */
+@media (max-width: 768px) {
+    .dropdown {
+        max-height: 70vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
