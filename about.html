@@ -162,10 +162,19 @@
             font-family: 'Times New Roman', serif;
         }
 
+        .about-block h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            color: #1a1a1a;
+            margin-bottom: 0.3rem;
+            margin-top: 1.2rem;
+        }
+
         .about-block p {
             font-size: 1rem;
             color: #3a3a3a;
-            margin-bottom: 1.2rem;
+            margin-bottom: 0.8rem;
             line-height: 1.9;
         }
 
@@ -198,7 +207,6 @@
             margin-bottom: 0.6rem;
         }
 
-        /* ===== 新增：邮箱样式 ===== */
         .footer-email {
             font-size: 0.7rem;
             color: #bfb9b1;
@@ -301,6 +309,7 @@
                 <li class="nav-item"><a href="auction.html" class="nav-link">竞拍规则</a></li>
                 <li class="nav-item"><a href="institutional-inquiry.html" class="nav-link">机构咨询</a></li>
                 <li class="nav-item"><a href="about.html" class="nav-link">关于植格</a></li>
+                <li class="nav-item"><a href="tech/index.html" class="nav-link">技术白皮书</a></li>
             </ul>
         </div>
     </nav>
@@ -310,7 +319,7 @@
 
         <section class="about-block">
             <h2>植格是什么</h2>
-            <p>植格是一套植物数字孪生参数引擎。它不拟合历史数据，不依赖田间传感器，不需要人工调参。我们只做一件事：为植物定义生理属性的物理边界，然后让它在真实天气中自己求解生存策略。</p>
+            <p>植格是一组植物数字孪生策略参数。它不拟合历史数据，不依赖田间传感器，不需要人工调参。我们只做一件事：为植物定义生理属性的物理边界，然后让它在真实天气中自己求解生存策略。</p>
             <p>每一组参数，都是植物自己在逐小时气象数据中活出来的结果。我们只是把它记录下来，交给你。</p>
         </section>
 
@@ -318,7 +327,27 @@
             <h2>为什么植格不同</h2>
             <p>传统农业模型依赖大量田间试验校准参数，一个产区一个作物需要数年验证，品种更换后需重新来过。模型是工具，需要专业团队操作。</p>
             <p>植格选择另一条路径。植物自己决定何时需要水、何时需要肥、何时该停止生长。人类从决策中心移走，变成边界设定者和结果记录者。单产区十五分钟求解，跨物种跨产区泛化，品种微调在容忍阈值内。</p>
-            <p>交付即终点——你获得参数所有权，自行集成。我们交付的是植物自己在真实天气中活出来的生存策略，不需要你成为专家才能使用，但你需要自己承担决策责任。</p>
+            <p>交付即终点。你获得参数所有权，自行集成。我们交付的是植物自己在真实天气中活出来的生存策略，不需要你成为专家才能使用，但你需要自己承担决策责任。</p>
+        </section>
+
+        <section class="about-block">
+            <h2>参数包的使用方法</h2>
+            <p>植格参数包是一组可集成的数字策略文件，不绑定任何平台或设备。买家获得授权后，可自行集成到以下场景：</p>
+
+            <h3>农业保险精算</h3>
+            <p>将参数包嵌入精算模型，可对指定产区进行逐小时级产量模拟。输出结果为保险公司提供物理级精度的风险定价依据——不是基于历史统计的经验估算，而是基于植物生理机制的推演。</p>
+
+            <h3>无人机变量喷洒</h3>
+            <p>将参数包集成到飞控系统，直接输出灌溉触发线和追肥时间。无人机不再需要田间传感器实时反馈，参数本身已包含该产区的最优水肥策略。从执行预设航线变成主动响应植物需求。</p>
+
+            <h3>农业水肥决策</h3>
+            <p>将参数包导入管理平台，生成逐周水肥建议。灌溉触发线和追肥时间由植格引擎在四年逐小时天气中涌现，种植者无需依赖个人经验判断。适用于大规模农场和农业服务公司的标准化管理。</p>
+
+            <h3>元宇宙植物引擎</h3>
+            <p>将参数包作为虚拟植物的底层驱动。不是动画，是物理级精度的数字生命——对光照、温度、水分做出符合生物学规律的响应。一片虚拟森林中的每一棵树，都可以由参数驱动其生长、休眠、竞争和衰老。</p>
+
+            <h3>供应链与粮食贸易</h3>
+            <p>将参数包嵌入风险评估系统，提前模拟目标产区在当前气候条件下的产量预期。为跨国粮商和主权基金提供全球产区的数字侦察能力，优化采购策略，对冲价格波动。</p>
         </section>
 
         <section class="about-block">
@@ -331,7 +360,6 @@
     <footer class="site-footer">
         <p class="footer-slogan">万植有格。The Foundation of Digital Plant Life.</p>
         <p class="footer-sub">Philosopher-Zhai</p>
-        <!-- ===== 新增：页脚邮箱 ===== -->
         <p class="footer-email">联系邮箱：<a href="mailto:phyton_zhai@outlook.com">phyton_zhai@outlook.com</a></p>
         <p class="footer-copy">© 2026 植格 Phyton</p>
     </footer>

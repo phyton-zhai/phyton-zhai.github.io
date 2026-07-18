@@ -1,86 +1,773 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technical Summary — Phyton Plant Digital Twin Engine</title>
+    <title>技术白皮书 — 植格 Phyton</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ============================================================
+           全局 — 科技白左风 (与about.html保持一致)
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Inter', 'Helvetica Neue', 'Segoe UI', Roboto, sans-serif;
+            background: #f7f6f3;
+            color: #1e1e1e;
+            line-height: 1.8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== 顶部导航 — 轻量毛玻璃 ===== */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px) saturate(1.2);
+            -webkit-backdrop-filter: blur(18px) saturate(1.2);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.8rem;
+            font-weight: 450;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #3a3a3a;
+            text-decoration: none;
+            transition: color 0.25s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: #1a1a1a;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: #000;
+        }
+
+        .has-dropdown {
+            position: relative;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+            min-width: 200px;
+            padding: 0.5rem 0;
+        }
+
+        .has-dropdown:hover .dropdown {
+            display: block;
+        }
+
+        .dropdown-inner {
+            padding: 0.5rem 1rem;
+        }
+
+        /* ===== 主内容 — 宽幅阅读 ===== */
+        .paper-page {
+            max-width: 820px;
+            margin: 3.5rem auto 2rem;
+            padding: 0 2rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .paper-page h1 {
+            font-size: 2.4rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 2.8rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        /* ===== 内容区块 ===== */
+        .paper-section {
+            margin-bottom: 3.2rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .paper-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .paper-section h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            color: #1a1a1a;
+            margin-bottom: 1.2rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .paper-section h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .paper-section p {
+            font-size: 1rem;
+            color: #3a3a3a;
+            margin-bottom: 1rem;
+            line-height: 1.9;
+        }
+
+        .paper-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ===== 表格样式 ===== */
+        .paper-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .paper-table th {
+            background: #f0f0eb;
+            color: #1a1a1a;
+            font-weight: 500;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .paper-table td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            color: #3a3a3a;
+        }
+
+        .paper-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ===== 代码块 ===== */
+        .code-block {
+            background: #f0f0eb;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 8px;
+            padding: 1.2rem 1.5rem;
+            margin: 1.2rem 0;
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: #2a2a2a;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .code-inline {
+            background: #f0f0eb;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: #2a2a2a;
+        }
+
+        /* ===== 公式引用 ===== */
+        .formula {
+            font-style: italic;
+            color: #555;
+            margin: 0.8rem 0;
+            padding-left: 1rem;
+            border-left: 2px solid rgba(0, 0, 0, 0.08);
+        }
+
+        /* ===== 页脚 ===== */
+        .site-footer {
+            text-align: center;
+            padding: 2.8rem 2rem 2.2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            margin-top: 2.5rem;
+            background: #fcfcfb;
+        }
+
+        .footer-slogan {
+            font-size: 1rem;
+            font-weight: 380;
+            letter-spacing: 3px;
+            color: #1a1a1a;
+            margin-bottom: 0.2rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .footer-sub {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: #b8b3ab;
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-email {
+            font-size: 0.7rem;
+            color: #bfb9b1;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+        .footer-email a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-email a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-copy {
+            font-size: 0.7rem;
+            color: #ccc7bf;
+            letter-spacing: 1px;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 700px) {
+            .top-nav {
+                padding: 0 1rem;
+            }
+            .nav-menu {
+                gap: 1.2rem;
+            }
+            .nav-link {
+                font-size: 0.7rem;
+                letter-spacing: 0.5px;
+            }
+            .nav-logo {
+                font-size: 1.1rem;
+                letter-spacing: 2px;
+            }
+            .paper-page {
+                padding: 0 1.2rem;
+                margin: 2rem auto 1rem;
+            }
+            .paper-page h1 {
+                font-size: 1.8rem;
+                letter-spacing: 2px;
+                margin-bottom: 2rem;
+            }
+            .paper-section h2 {
+                font-size: 1.2rem;
+            }
+            .paper-section h3 {
+                font-size: 1rem;
+            }
+            .paper-section p {
+                font-size: 0.95rem;
+            }
+            .paper-table {
+                font-size: 0.75rem;
+            }
+            .paper-table th, .paper-table td {
+                padding: 0.5rem 0.6rem;
+            }
+            .code-block {
+                font-size: 0.75rem;
+                padding: 1rem;
+            }
+            .footer-slogan {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .nav-menu {
+                gap: 0.8rem;
+            }
+            .nav-link {
+                font-size: 0.6rem;
+                letter-spacing: 0.3px;
+            }
+            .nav-logo {
+                font-size: 0.95rem;
+            }
+            .paper-page {
+                padding: 0 1rem;
+                margin: 1.5rem auto 0.5rem;
+            }
+            .paper-page h1 {
+                font-size: 1.5rem;
+            }
+            .paper-section {
+                margin-bottom: 2rem;
+                padding-bottom: 2rem;
+            }
+            .paper-section p {
+                font-size: 0.88rem;
+            }
+            .paper-table {
+                font-size: 0.65rem;
+            }
+            .paper-table th, .paper-table td {
+                padding: 0.4rem 0.4rem;
+            }
+            .code-block {
+                font-size: 0.7rem;
+                padding: 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-    <header>
-        <h1><a href="../index.html" style="color:inherit;text-decoration:none;">Phyton</a></h1>
-        <p class="subtitle">Technical Summary</p>
-    </header>
-
-    <main class="institutional">
-        <h2>Phyton Engine: A Non-Gradient, Emergence-Based Approach to Plant Digital Twins</h2>
-
-        <p style="color:var(--muted);font-size:0.9rem;margin-bottom:2rem;">
-            This document provides a technical overview for institutional analysts and technical due diligence teams.
-            It describes the core methodology without disclosing proprietary implementation details.
-        </p>
-
-        <h3>1. Core Differentiator: Emergence vs. Fitting</h3>
-        <p>The global academic and industrial consensus on crop modeling relies on <strong>parametric fitting</strong> — using statistical regression, neural networks, or differential equations calibrated against historical yield data. These models require hundreds of manually tuned parameters and exhibit severe degradation when applied outside their training distribution.</p>
-        <p>Phyton employs a fundamentally different paradigm. We define a bounded <strong>attribute pool</strong> (28–70+ dimensions depending on species complexity) representing the physiologically plausible range of plant survival strategies. A population of digital plant entities is then subjected to <strong>multi-year, hourly-resolution real weather data</strong> (ECMWF ERA5). Through an evolutionary process involving 200 individuals across 200 generations, plants that fail to survive are eliminated, and those that successfully complete their life cycle pass their attributes forward.</p>
-        <p>The result is a set of strategy parameters that were <strong>not fitted, not tuned, and not manually adjusted</strong>. They emerged as the unique survival solution for that specific crop in that specific environment. Each parameter is precise to 8–9 decimal places — a precision level unattainable through manual calibration or statistical fitting.</p>
-
-        <h3>2. Key Technical Properties</h3>
-        <ul style="margin-left:1.5rem;color:var(--muted);line-height:1.8;">
-            <li><strong>Physics-Informed Bounds:</strong> All attribute dimensions are constrained by known physiological limits (e.g., Rubisco enzyme kinetics for C3/C4 photosynthesis, soil hydraulic conductivity for root water uptake).</li>
-            <li><strong>Cross-Species Generalization:</strong> The same engine, without architectural modification, has successfully generated validated parameters for wheat, corn, soybean, peanut, rice, and an invasive annual weed (Erigeron canadensis).</li>
-            <li><strong>Global Coverage Capability:</strong> The engine is driven by ECMWF ERA5 global reanalysis data, enabling parameter generation for any coordinate on Earth with sufficient historical weather records.</li>
-            <li><strong>Extreme Climate Resilience:</strong> Parameters are validated against historical extreme events (drought, flood, late frost, heat-forced maturity) embedded in the training data, not through synthetic scenario generation.</li>
-            <li><strong>Minimal Computational Footprint:</strong> A single crop-region parameter set converges in approximately 15 minutes on consumer-grade CPU hardware (6-core, 12-thread). No GPU acceleration required. No cloud dependency.</li>
+    <nav class="top-nav">
+    <div class="nav-inner">
+        <a href="../index.html" class="nav-logo">植格</a>
+        <ul class="nav-menu">
+            <li class="nav-item has-dropdown">
+                <a href="#" class="nav-link">产品目录</a>
+                <div class="dropdown" id="productDropdown">
+                    <div class="dropdown-inner">
+                        <p style="color:var(--muted);text-align:center;padding:1rem;">加载中…</p>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item"><a href="../auction.html" class="nav-link">竞拍规则</a></li>
+            <li class="nav-item"><a href="../institutional-inquiry.html" class="nav-link">机构咨询</a></li>
+            <li class="nav-item"><a href="../about.html" class="nav-link">关于植格</a></li>
+            <li class="nav-item"><a href="index.html" class="nav-link">技术白皮书</a></li>
         </ul>
+    </div>
+</nav>
 
-        <h3>3. Validated Coverage (as of July 2026)</h3>
-        <table style="width:100%;border-collapse:collapse;margin-top:1rem;font-size:0.9rem;">
-            <thead>
-                <tr style="border-bottom:1px solid var(--border);">
-                    <th style="text-align:left;padding:0.5rem;">Crop</th>
-                    <th style="text-align:left;padding:0.5rem;">Regions Covered</th>
-                    <th style="text-align:left;padding:0.5rem;">Climate Zones (Köppen)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Winter Wheat</td><td style="padding:0.5rem;">Puyang, Baoding, Nanjing, Kharkiv (Ukraine)</td><td style="padding:0.5rem;">Dwa, Cwa, Dfb</td></tr>
-                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Corn (Maize)</td><td style="padding:0.5rem;">Harbin, Puyang, Nanjing, Des Moines (US)</td><td style="padding:0.5rem;">Dwa, Cwa, Dfa</td></tr>
-                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Soybean</td><td style="padding:0.5rem;">Puyang, Baoding, Nanjing, Cuiabá (Brazil)</td><td style="padding:0.5rem;">Dwa, Cwa, Aw</td></tr>
-                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Peanut</td><td style="padding:0.5rem;">Puyang, Baoding, Nanjing</td><td style="padding:0.5rem;">Dwa, Cwa</td></tr>
-                <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.5rem;">Rice</td><td style="padding:0.5rem;">Harbin, Changsha, Guangzhou</td><td style="padding:0.5rem;">Dwa, Cfa, Cwa</td></tr>
-                <tr><td style="padding:0.5rem;">Erigeron canadensis</td><td style="padding:0.5rem;">(Global weed, single representative parameter set)</td><td style="padding:0.5rem;">Dwa</td></tr>
-            </tbody>
-        </table>
+    <main class="paper-page">
+        <h1>技术白皮书</h1>
 
-        <h3>4. Validation Protocol</h3>
-        <p>Each parameter set undergoes a standardized validation pipeline:</p>
-        <ol style="margin-left:1.5rem;color:var(--muted);line-height:1.8;">
-            <li><strong>Historical Backtest:</strong> 4-year continuous simulation at hourly resolution (≈35,040 hours). Output compared against local standard agricultural practices.</li>
-            <li><strong>Extreme Climate Stress Test:</strong> Identification and replay of extreme weather periods within the training data (drought years, flood years, late frost events).</li>
-            <li><strong>Cross-Region Consistency Check:</strong> Parameter sets for the same crop across different regions are compared to verify that regional differences are attributable to environmental variables rather than model instability.</li>
-            <li><strong>Open-Source Verification Script:</strong> A universal backtest script (Python) is provided for independent third-party validation. Buyers can verify all claimed results using their own weather data.</li>
-        </ol>
+        <!-- 第一章 -->
+        <section class="paper-section">
+            <h2>第一章 参数的结构</h2>
+            
+            <h3>1.1 28维向量：工程含义</h3>
+            <p>以下是哈尔滨玉米参数包的28个属性值。每个属性是一个浮点数，在系统中以<span class="code-inline">double</span>类型读取，调用方式为<span class="code-inline">genome["属性名"]</span>。</p>
 
-        <h3>5. Intellectual Property & Data Sources</h3>
-        <p>All input data (ECMWF ERA5, FAO HWSD) are publicly and legally accessible global datasets. The Phyton engine and all generated parameter sets are original intellectual property. No classified, proprietary, or personally identifiable data is used at any stage of the pipeline.</p>
+            <table class="paper-table">
+                <thead>
+                    <tr><th>属性名</th><th>工程含义</th><th>在系统中的调用位置</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="code-inline">photo_base_rate</span></td><td>基础光合速率</td><td>逐小时光合计算</td></tr>
+                    <tr><td><span class="code-inline">respiration_base</span></td><td>基础呼吸消耗</td><td>逐小时呼吸计算</td></tr>
+                    <tr><td><span class="code-inline">respiration_height_f</span></td><td>株高对呼吸的额外消耗系数</td><td>呼吸计算的高度修正项</td></tr>
+                    <tr><td><span class="code-inline">transpiration_per_leaf</span></td><td>单位叶面积蒸腾速率</td><td>逐小时蒸腾计算</td></tr>
+                    <tr><td><span class="code-inline">water_cost_base</span></td><td>基础水分消耗</td><td>逐小时水分平衡</td></tr>
+                    <tr><td><span class="code-inline">water_uptake_efficiency</span></td><td>根系吸水效率</td><td>土壤水分吸收计算</td></tr>
+                    <tr><td><span class="code-inline">irrigation_trigger</span></td><td>灌溉触发阈值</td><td>灌溉决策模块：植株体内水分低于此值时触发灌溉请求</td></tr>
+                    <tr><td><span class="code-inline">max_root_depth</span></td><td>最大根深（m）</td><td>根系生长上限和土壤水分吸收范围</td></tr>
+                    <tr><td><span class="code-inline">nitrogen_decay_rate</span></td><td>氮素消耗速率</td><td>逐小时氮素平衡</td></tr>
+                    <tr><td><span class="code-inline">max_height</span></td><td>最大株高（m）</td><td>茎秆生长上限</td></tr>
+                    <tr><td><span class="code-inline">leaf_growth_alloc</span></td><td>叶片分配比例</td><td>生物量分配模块</td></tr>
+                    <tr><td><span class="code-inline">root_growth_alloc</span></td><td>根系分配比例</td><td>生物量分配模块</td></tr>
+                    <tr><td><span class="code-inline">stem_growth_alloc</span></td><td>茎秆分配比例</td><td>生物量分配模块</td></tr>
+                    <tr><td><span class="code-inline">plant_density</span></td><td>种植密度（株/亩）</td><td>群体光竞争和根系竞争计算</td></tr>
+                    <tr><td><span class="code-inline">light_competition_factor</span></td><td>光竞争遮阴衰减系数</td><td>群体光合有效辐射计算</td></tr>
+                    <tr><td><span class="code-inline">root_competition_factor</span></td><td>根系竞争水分系数</td><td>群体水分吸收计算</td></tr>
+                    <tr><td><span class="code-inline">gdd_emergence</span></td><td>出苗所需积温（°C·d）</td><td>物候阶段判断</td></tr>
+                    <tr><td><span class="code-inline">gdd_maturity</span></td><td>完熟所需积温（°C·d）</td><td>物候阶段判断</td></tr>
+                    <tr><td><span class="code-inline">repro_energy_thresh</span></td><td>繁殖启动能量阈值</td><td>繁殖启动判断</td></tr>
+                    <tr><td><span class="code-inline">repro_age_min</span></td><td>繁殖最小日龄（天）</td><td>繁殖启动判断</td></tr>
+                    <tr><td><span class="code-inline">repro_cost</span></td><td>繁殖启动一次性能量消耗</td><td>繁殖启动时的能量扣除</td></tr>
+                    <tr><td><span class="code-inline">grain_fill_allocation</span></td><td>灌浆期光合产物分配给籽粒的比例</td><td>灌浆期能量分配</td></tr>
+                    <tr><td><span class="code-inline">maturity_threshold</span></td><td>完熟所需的繁殖能量积累量</td><td>完熟判断</td></tr>
+                    <tr><td><span class="code-inline">leaf_senescence_rate</span></td><td>叶片衰老速率</td><td>灌浆期叶面积衰减</td></tr>
+                    <tr><td><span class="code-inline">senescence_mobilization_rate</span></td><td>衰老叶片储存物质释放比例</td><td>灌浆期母体牺牲动员</td></tr>
+                    <tr><td><span class="code-inline">structural_reserve_fraction</span></td><td>生物量中可动员的储存比例</td><td>灌浆期母体牺牲动员</td></tr>
+                    <tr><td><span class="code-inline">active_senescence_thresh</span></td><td>主动衰老触发的籽粒饱满度阈值</td><td>灌浆后期管理决策</td></tr>
+                    <tr><td><span class="code-inline">c4_photosynthesis_boost</span></td><td>C4光合额外加成系数</td><td>玉米光合效率修正</td></tr>
+                </tbody>
+            </table>
 
-        <h3>6. Contact for Technical Due Diligence</h3>
-        <p>Qualified institutional investors may request a more detailed technical briefing under NDA. Please use the <a href="../institutional-inquiry.html">Institutional Inquiry</a> channel.</p>
+            <p>这28个值构成一个完整的生理参数向量。任何一个植物生长模拟引擎，只要实现了光合、呼吸、蒸腾、吸水、氮消耗、生物量分配、物候推进、衰老动员这八类标准生理过程，就可以通过加载这组参数来驱动一株虚拟玉米在特定天气数据中完成从播种到完熟的完整生命周期。</p>
 
-        <p style="margin-top:3rem;font-size:0.8rem;color:var(--light-muted);">
-            This document is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any security or asset.
-        </p>
+            <h3>1.2 传统方法的局限：预设方程的不可迁移性</h3>
+            <p>要理解这28个参数与传统的区别，需要先审视标准作物模型——以DSSAT（Decision Support System for Agrotechnology Transfer）为代表——的核心设计逻辑。</p>
+            <p>DSSAT及其同类模型（APSIM、WOFOST、AquaCrop）的基础架构是：为每个生理过程预设一个数学方程，然后通过田间实验数据拟合方程中的参数。光合-光强曲线用直角双曲线：</p>
+            <div class="formula">P = (α × I × Pmax) / (α × I + Pmax)</div>
+            <p>其中α是初始量子效率，Pmax是最大光合速率，I是光合有效辐射。这两个参数——α和Pmax——是通过测量不同光强下的光合速率，然后用非线性回归拟合出来的。呼吸-温度曲线用Q10函数：</p>
+            <div class="formula">R = R20 × Q10^((T - 20) / 10)</div>
+            <p>其中R20是20°C时的呼吸速率，Q10是温度敏感系数。蒸腾用Penman-Monteith方程，根系吸水用Richards方程，物候发育用积温线性模型。</p>
+            <p>这套方法的核心特征在于方程结构是人为预设的。直角双曲线不是植物告诉我们的——是植物生理学家在20世纪80年代选择了这个函数形式，因为它看起来和实验数据吻合。Q10函数的选择同样如此。每一个方程都承载着一个隐含假设：植物的生理过程可以用特定的数学函数来描述。</p>
+            <p>这些假设在标准实验条件（恒温、恒湿、控制光照）下成立。标准条件恰好是DSSAT参数校准的实验条件——因此，DSSAT在标准条件下表现出色，其预测误差通常在可接受范围内。然而，标准条件与真实农田的差距构成了传统模型不可迁移的根本原因。</p>
+            <p>一株玉米在真实田间经历的不是恒温恒湿，而是逐小时波动的温度、间歇性的干旱、被邻居遮挡的光照。当环境条件偏离实验条件时，预设方程的结构本身不再适应——直角双曲线在光抑制条件下会高估光合速率，Q10函数在极端高温下会低估呼吸消耗。更关键的是，方程的数学结构是固定不变的，模型只能通过调整参数值来适应新环境，但参数调整的范围受限于方程结构的表达能力。如果真实植物的响应模式超出了预设方程所能描述的函数空间，任何参数调整都无法弥合这个差距。</p>
+
+            <h3>1.3 这28个参数的本质：不是方程参数，是解</h3>
+            <p>区别于传统模型的"预设方程+拟合参数"逻辑，这28个参数不依赖于任何预设的生理方程。它们是一个进化算法的收敛结果：在哈尔滨2019-2022年逐小时天气数据驱动下，200个候选植株个体同时求解存在——每个个体携带一组随机生成的参数值，逐小时计算光合收入、呼吸消耗、水分平衡、氮素消耗、生物量分配，在四年天气中经历完整的生命周期。存活到最后的个体，其参数组合就是这28个值。</p>
+            <p>这组参数不是对任何实验数据的拟合，不是对任何理论方程的近似。它是植格在真实天气中自己求解存在时涌现出来的策略。光合效率0.28不是从光响应曲线回归得到的，而是植格在哈尔滨的高纬度长日照条件下自己收敛出来的最优值——C4光合加成系数被压到了搜索空间的上限附近，因为在这种光照条件下，更高的光合效率直接转化为更高的产量。灌溉触发线6.86同样不是从土壤水分平衡方程推导的，而是植格在四年天气中自己学会的"喊渴"时机——那些过早触发灌溉的个体因水肥成本过高被淘汰，过晚触发灌溉的个体因干旱致死被淘汰，存活下来的个体恰好在水分临界点前发出信号。</p>
+            <p>这一区分的工程意义在于：传统模型在迁移到新产区时需要重新校准参数——派农技人员到目标产区做田间实验，测量光合曲线、呼吸曲线、蒸腾速率，然后重新拟合所有方程参数。这是一项耗时数年、耗资巨大的工作。而这28个参数只需要更换天气数据文件，在同一套求解框架下重新运行进化，即可在几十分钟内产出新产区的参数组合。参数不是被校准的，是被筛选的。</p>
+
+            <h3>1.4 参数如何与天气耦合</h3>
+            <p>加载参数文件的引擎在启动时，初始化一株虚拟玉米的状态：初始能量20.0，初始水分12.0，初始氮素8.0，株高0.1m，根深0.1m，叶面积0.1。然后逐小时读取天气数据：</p>
+            <div class="code-block">for hour_data in weather_records:
+    temp = hour_data['temp']          # 温度, °C
+    precip = hour_data['precip']       # 降水, mm
+    solar = hour_data['solar']         # 短波辐射, W/m²
+    humidity = hour_data['humidity']   # 相对湿度, %
+    plant.update(temp, precip, solar, humidity, soil)</div>
+            <p>每次调用<span class="code-inline">update</span>时，引擎执行以下计算序列：积温累积——若温度&gt;10°C，则将超出部分累加入gdd；光合作用——实际光合 = 光照 × 叶面积 × photo_base_rate × C4加成 × 氮素修正 × 水分修正 × 温度修正；呼吸消耗——基础呼吸 + 株高相关呼吸，灌浆期乘以0.7；蒸腾失水——叶面积 × 蒸腾系数 × 温度修正，灌浆期乘以0.6；根系吸水——根深 × 吸水效率 × 土壤有效水分比例；氮素消耗——若能量和水分充裕，从体内氮素池扣除；生物量分配——按叶片、根系、茎秆的分配比例将净光合产物分配给各器官；物候推进——根据积温判断是否出苗、拔节、抽穗、完熟；灌溉请求——若体内水分低于触发线且距上次灌溉超过48小时，则发出灌溉指令。</p>
+            <p>这些计算步骤不依赖任何预设的数学方程结构。光合效率、灌溉触发线、氮消耗速率——这些决定植株行为的关键参数，都是植格在进化中自己收敛出来的值。引擎的职责不是"预测"植物如何生长，而是忠实地执行这28个参数所编码的策略，让虚拟植株在天气数据中自己跑完整个生命周期。</p>
+
+            <h3>1.5 参数如何输出决策变量</h3>
+            <p>灌溉决策：引擎监测植株体内水分。当<span class="code-inline">water &lt; irrigation_trigger</span>且距上次灌溉超过48小时，系统输出灌溉指令——灌溉量20mm，成本50元/亩。这个逻辑不依赖任何土壤墒情传感器或天气预报，只依赖参数中预设的触发线和引擎计算出的当前水分状态。</p>
+            <p>追肥决策：引擎监测植株体内氮素。当氮素低于预设的胁迫阈值时，系统输出追肥指令——追施尿素6kg/亩，成本30元。氮消耗速率决定了追肥的频率——消耗快的产区追肥更频繁，消耗慢的产区可能整个生育期不需要追肥。</p>
+            <p>产量预估：灌浆期结束时，引擎读取植株的<span class="code-inline">grain_energy</span>值——这是灌浆期间累积的籽粒能量总量。这个值可以直接映射为亩产量，映射系数由品种特性决定。与传统产量预估模型的区别在于，这个值不是从统计回归得到的，而是同一株虚拟玉米在指定天气序列中实际累积的灌浆产物——天气好就多累积，天气差就少累积，极端天气下可能未能完熟就终止。</p>
+            <p>灌浆后期管理：引擎监测<span class="code-inline">active_senescence_thresh</span>——主动衰老触发点。当籽粒充實度超过该阈值时，植株启动母体牺牲程序——叶片加速衰老，茎秆储存物质被动员输送给籽粒。此时植株不再吸收水分和养分，继续灌溉和追肥无效。系统可据此输出"停止灌溉"和"停止追肥"的建议，避免灌浆后期的无效投入。传统农学中，这个时间点通常由农技员的经验判断，或按固定日历操作。参数通过量化母体牺牲的触发条件，将经验判断转化为可编程的决策规则。</p>
+        </section>
+
+        <!-- 第二章 -->
+        <section class="paper-section">
+            <h2>第二章 飞控系统接入</h2>
+
+            <h3>2.1 传统飞控决策的底层缺陷</h3>
+            <p>当前农业无人机领域的精准施肥决策，核心逻辑链路如下：多光谱/高光谱相机采集冠层反射率 → 植被指数计算（NDVI、NDRE、CIrededge等） → 经验回归模型估算叶片氮含量 → 对照农学阈值判断追肥需求 → 输出作业处方图。</p>
+            <p>这条链路在每个环节都存在结构性缺陷，且缺陷之间相互放大。</p>
+            <p><strong>光谱反演的物理瓶颈。</strong> NDVI与叶片氮含量的关系并非一一映射。当叶面积指数超过3.0时，NDVI趋于饱和——冠层继续增厚，NDVI几乎不变，但植株的实际氮素需求仍在变化。NDRE（红边归一化指数）对高LAI条件下的叶氮含量更敏感，但其穿透深度仅限于冠层表层，无法反映中下层叶片的氮素状况。更根本的问题是：反射光谱测量的是叶绿素含量，而叶绿素含量与氮素含量的关系受品种、生育期、光照历史、水分胁迫等多重因素影响，二者的Pearson相关系数在不同条件下可在0.6到0.9之间波动。用反射光谱估算叶氮含量，本质上是用一个间接指标去推断另一个间接指标。</p>
+            <p><strong>经验回归的不可迁移性。</strong> NDVI-叶氮回归方程的标准建立流程是：在目标田块采样（破坏性取样，实验室凯氏定氮法测叶氮含量），同步获取无人机影像，建立线性或非线性回归模型。这个模型的有效性严格受限于校准数据采集时的品种、生育期、土壤条件、气候背景。更换品种后，冠层结构和叶片光学特性发生变化，原有回归方程需要重新校准。更换产区后，土壤背景反射率和大气条件发生变化，原有回归方程同样失效。校准成本随覆盖产区和品种数量的增加而线性增长，这是传统飞控厂商无法通过技术迭代解决的结构性成本。</p>
+            <p><strong>追肥阈值的生物学盲区。</strong> 传统飞控判断"是否需要追肥"的逻辑是：当前估算叶氮含量是否低于该生育期的标准氮含量范围。这个"标准范围"来源于农学手册或历史数据统计，代表的是群体平均水平，不反映当前田块当前植株的实际需求。一株玉米对氮素的实际需求量取决于其当前的光合速率、生长速率、水分状况和碳氮平衡——这些变量无法通过单一的叶氮含量阈值来捕捉。当土壤水分不足时，植株的光合速率下降，氮素需求同步降低，此时即使叶氮含量低于标准范围，追肥也无法转化为产量增益——施入的氮素因缺水无法被根系吸收，挥发或淋溶损失。传统飞控无法整合这些协同限制因素，因为它只有一个输入变量（反射光谱）和一个输出判断（追肥/不追肥）。</p>
+
+            <h3>2.2 参数驱动的决策范式</h3>
+            <p>这28个参数提供的是植株内部状态的完整数字孪生，而不是外部光谱的间接推断。飞控系统加载参数文件后，引擎从播种日开始逐小时运行：</p>
+            <div class="code-block">plant = CornPlant(genome)
+soil = SimpleSoil(field_capacity=0.25, wilting_point=0.08)
+soil.moisture = 0.30
+for hour_data in weather_stream:
+    plant.update(hour_data, soil)
+    if plant.nitrogen < NITROGEN_STRESS_THRESHOLD:
+        trigger_fertilization(amount=6.0)  # kg/亩</div>
+            <p>与传统飞控的核心区别在于决策依据的层次。传统飞控根据冠层反射光谱判断"植株当前看起来是否缺氮"——这是表型诊断。参数引擎计算植株体内氮素池的动态变化——光合消耗氮、土壤供应氮、根系吸收氮、固氮（豆科）补充氮——这是生理模拟。表型诊断只能告诉你此刻的状态，生理模拟可以告诉你此刻的状态加上未来几天的演变趋势。</p>
+            <p>以哈尔滨玉米为例。参数中<span class="code-inline">nitrogen_decay_rate</span>为0.0077（每小时消耗），<span class="code-inline">water_uptake_efficiency</span>为0.004。引擎逐小时计算：净光合产生的能量减去呼吸消耗后，分配多少给叶片（用于扩展光合面积）、多少给根系（用于增强吸水能力）、多少给茎秆（用于支撑株高）。氮素在光合作用中被消耗——消耗速率不是固定值，而是受温度、水分、当前生物量共同调制。当体内氮素低于预设阈值时，引擎发出追肥指令。这个阈值也不是固定值——它隐含地受<span class="code-inline">repro_energy_thresh</span>（繁殖启动能量阈值）和<span class="code-inline">grain_fill_allocation</span>（灌浆分配比例）的约束，因为氮素亏缺会直接影响光合效率和最终的籽粒产量。</p>
+
+            <h3>2.3 与传统方案的对比</h3>
+            <p>以哈尔滨玉米四年回测数据为基准：</p>
+            <table class="paper-table">
+                <thead>
+                    <tr><th>对比维度</th><th>NDVI基飞控</th><th>参数驱动</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>追肥触发依据</td><td>冠层反射光谱→叶氮估算</td><td>体内氮素池的动态模拟</td></tr>
+                    <tr><td>追肥时机</td><td>叶色变化后（滞后）</td><td>氮素降至阈值前（提前）</td></tr>
+                    <tr><td>氮素需求判断</td><td>对照生育期标准范围</td><td>当前光合速率、生长速率、水分状况协同决定</td></tr>
+                    <tr><td>干旱年自适应</td><td>无（叶氮含量可能更低，触发更多追肥）</td><td>有（干旱降低光合，氮素需求同步下降，追肥减少）</td></tr>
+                    <tr><td>多雨年自适应</td><td>无（叶氮含量被稀释，可能误判为缺氮）</td><td>有（水分充足加速生长，氮素消耗加快，追肥增加）</td></tr>
+                </tbody>
+            </table>
+            <p>传统飞控在干旱年份会犯系统性错误：干旱导致叶片含水量下降、叶绿素浓度相对升高，NDVI值不降反升；但植株的实际氮素需求因光合受限而下降。飞控系统根据NDVI判断"不缺氮"，而实际上植株因缺水无法利用土壤中的氮素——此时追肥不仅无效，反而加剧盐害风险。参数驱动的引擎同步计算水分平衡和氮素平衡，在水分胁迫条件下自动降低氮素消耗速率，避免了这一误判。</p>
+
+            <h3>2.4 嵌入方式</h3>
+            <p><strong>芯片级嵌入。</strong> 将28个参数值和逐小时更新函数编译为C/C++模块，写入飞控芯片的ROM。芯片运行时不依赖网络连接——所有计算在本地完成。气象数据从飞控自带的微型气象站获取（温度、湿度、气压、辐射），或通过SD卡预加载该产区未来一周的气象预报数据。逐小时更新函数的核心计算量不超过200次浮点运算，在当前ARM Cortex-M系列芯片上耗时低于1毫秒，不影响飞控主循环的实时性。</p>
+            <p><strong>云端服务嵌入。</strong> 参数文件上传至云服务器，飞控系统通过API接口发送实时气象数据，云端返回决策指令。延迟取决于网络条件，通常在100-500毫秒。适用于需要动态调整参数的场景（如更换品种、更换产区），但依赖网络可用性。</p>
+            <p><strong>离线文件嵌入。</strong> 参数文件和引擎编译为独立的动态链接库(.so或.dll)，由飞控厂商的主控程序在启动时加载。与芯片级嵌入的区别在于参数更新更灵活——替换参数文件即可切换产区/品种，不需要重新烧录固件。</p>
+            <p>三种嵌入方式的接口统一为：</p>
+            <div class="code-block">输入: 逐小时气象数据流 {temp, precip, solar, humidity}
+输出: 逐小时决策指令流 {irrigation_triggered: bool, fertilization_triggered: bool, 
+       irrigation_amount: float, fertilization_amount: float, 
+       current_nitrogen_level: float, current_yield_estimate: float}</div>
+
+            <h3>2.5 验证方法</h3>
+            <p>买方技术团队在部署前，可在自有历史天气数据和田间实验记录上进行独立验证。验证步骤如下：</p>
+            <p>第一步，加载参数文件和哈尔滨2019-2022年天气数据（可从ERA5公开数据集下载）。第二步，运行引擎，记录四年中每次灌溉触发的时间、每次追肥触发的时间和用量。第三步，将引擎输出的追肥时间序列与买方自有田块的实际追肥记录对比——如果买方在2019-2022年间在哈尔滨地区有玉米田块的农事记录。第四步，对比引擎输出的产量预估值与买方自有田块的实际测产数据。</p>
+            <p>如果买方在哈尔滨地区没有历史数据，可在当前种植季进行并行验证：选取两块条件相似的田块，一块按传统飞控方案追肥，一块按引擎输出的追肥建议操作。收获时对比两组产量和投入成本。</p>
+            <p>参数的适应度不依赖于任何人的认可或否定——它是在哈尔滨四年真实天气中被存在本身筛选出来的最优策略。验证不是验证参数是否正确，而是验证参数是否匹配买方田块的实际情况。如果田块的土壤条件、品种特性、管理模式与参数生成时的输入条件存在显著偏差，参数可能不完全适用，需要根据实际条件重新求解。这种情况不属于参数失效，属于输入条件变更，需重新生成参数包。</p>
+        </section>
+
+        <!-- 第三章 -->
+        <section class="paper-section">
+            <h2>第三章 精算模型接入</h2>
+
+            <h3>3.1 传统农业保险精算的底层缺陷</h3>
+            <p>当前农业保险精算的核心方法论，建立在统计回归与历史赔付数据的双支柱之上。精算部门收集目标区域过去10-30年的产量数据（通常来自统计局或农业部门的县级产量统计）和同期气象数据（降水量、温度、干旱指数），通过多元线性回归或广义线性模型建立产量-气象因子关系，然后将这个关系映射到赔付率预测上。保费定价的逻辑是：预期赔付率高 → 保费高，预期赔付率低 → 保费低。</p>
+            <p>这条链路在三个层面存在结构性缺陷。</p>
+            <p><strong>统计相关的因果盲区。</strong> 产量与气象因子之间的回归系数代表的是统计相关性，不代表因果关系。某年产量偏低可能与当年降水量偏少同时发生，但产量偏低的真实原因可能是病害爆发、品种退化或农事管理失误。回归模型将所有无法解释的产量波动都归因于气象因子，导致回归系数估计有偏且不稳定——每次加入新数据或更换数据源，回归系数都会发生显著变化。这种不稳定性在精算实务中的体现是：同一区域不同精算师用同一套方法论，可能得出差异显著的保费定价。</p>
+            <p><strong>极端气候的统计盲区。</strong> 保险精算真正关心的不是正常年份的产量波动，而是极端气候事件触发的巨额赔付。然而，极端气候事件的定义本身就是统计稀有的——在30年的产量序列中，真正触发巨额赔付的极端事件可能只有3-5次，甚至更少。用3-5个样本去拟合一个回归模型，统计置信区间宽到在商业上毫无意义。更根本的问题在于统计回归无法外推——回归模型在训练数据的取值范围内可以给出合理预测，但在超出训练范围时完全失效。当极端气候的强度超过历史记录时，回归模型无法预测损失。这一缺陷是统计方法论的内在局限，不是数据量不够多的问题，是统计回归作为方法本身在结构上无法处理外推问题。</p>
+            <p><strong>空间粒度的定价盲区。</strong> 县级产量统计是公开数据的最小粒度，但同一县内不同乡镇的土壤类型、地形条件、微气候、灌溉设施可能存在显著差异。保险公司无法从公开数据中获取乡镇级或村级的历史产量序列，因此无法为更细粒度的空间单元定价。这意味着高风险地块和低风险地块适用同一费率，低风险地块的农户实际上在补贴高风险地块的农户。这正是逆向选择的温床——高风险地块的农户更倾向于投保，低风险地块的农户倾向于退出，导致保险池的风险结构持续恶化。传统精算方法论无力解决这一难题。</p>
+            <p><strong>理赔评估的主观性。</strong> 当干旱或洪涝触发理赔时，定损通常依赖现场勘查，由农技人员或公估师根据经验估算产量损失比例。这个过程不仅耗时耗力，而且在不同评估人员之间存在显著差异。缺乏基于生理机制的客观损失评估模型。</p>
+
+            <h3>3.2 参数驱动的产量预估</h3>
+            <p>这28个参数提供的是确定性生理模拟，区别于传统精算的统计回归。参数与精算模型的关系不是替换——精算模型仍然负责保费定价、风险分摊、再保险策略等精算业务逻辑——而是提供一个统计回归无法提供的核心输入：在任意给定天气序列下，同一株虚拟玉米的产量预测。</p>
+            <p>参数驱动的产量预估与传统精算模型的区别在于：传统模型在统计相关层面工作，产量预测基于历史产量与历史气象数据的回归关系，这种关系不包含植物的生理过程，预测能力被限制在历史数据的波动范围内。参数在生理因果层面工作，产量预测是同一株虚拟玉米在给定天气中实际累积的灌浆产物——光合收入减去呼吸消耗，减去水肥成本，减去应激惩罚。天气好产量高，天气差产量低，极端天气下可能因干旱、低温或高温逼熟而未能完熟。这两种预测值在正常年份可能接近，但在极端气候条件下差异显著——回归模型无法外推，参数引擎忠实模拟极端气候的生理效应。</p>
+            <p>产量预估函数的接口定义如下。输入是目标产区的天气数据序列，数据源为ERA5再分析数据集或当地气象站数据，格式为逐小时温度、降水、短波辐射、相对湿度。输出是逐年产量序列，单位为籽粒能量，可映射为kg/亩。调用方式为加载参数文件和土壤参数，逐小时运行植格引擎，引擎内部包含完整的生理过程模拟。这一设计使得买方技术团队可以独立验证——只需获取天气数据即可运行引擎，不需要任何实验田或历史产量数据。</p>
+
+            <h3>3.3 在保费定价中的应用</h3>
+            <p>参数引擎输出的逐年产量序列可以直接用于计算各产区的预期产量损失率，作为保费定价的核心输入。</p>
+            <p>定价逻辑如下。对目标产区，加载最近N年（建议N≥10）的逐小时天气数据，逐年运行引擎，得到N个产量预测值。同时获取同期该产区的县级产量统计或投保农户上报的产量序列。对每一年计算产量损失率——如果当年引擎预测的产量低于正常年份引擎预测产量的某个百分比（如30%），标记为灾害年。统计N年中灾害年的比例，得到灾害发生概率的估计。对每个灾害年，计算引擎预测的产量损失幅度——正常产量减去灾害年产量，除以正常产量。将损失幅度映射为赔付率——赔付率等于损失幅度乘以赔付比例系数。</p>
+            <p>传统精算方法对极端气候的定价完全依赖历史赔付记录，而参数引擎可以在没有历史赔付记录的情况下，直接模拟极端气候的产量损失。以哈尔滨玉米为例，如果将2018年（积温不足年份）的天气数据输入引擎，引擎输出的产量预测约为35.0——比正常年份的35.1仅低0.1个单位。这告诉精算师：对于哈尔滨玉米，积温偏低的年份不会造成显著的产量损失，因此无需为此类气候事件设定高保费。反之，如果将黑河2018年的天气数据输入大豆参数引擎，引擎输出的产量预测远低于正常水平，且未完熟——精算师可以据此为黑河大豆设定更高的低温灾害保费。</p>
+            <p>参数引擎实现了县级甚至乡镇级的差异化定价。只要天气数据覆盖到该空间分辨率，引擎就能输出该位置的产量预测。不同乡镇的土壤参数可以不同——沙土保水差，黏土保水好——引擎通过调整土壤参数来反映这种差异。保险公司可以为每个乡镇单独计算预期产量损失率，据此设定差异化保费。</p>
+
+            <h3>3.4 在核保核赔中的应用</h3>
+            <p>核保环节的应用逻辑在于核实农户上报的历史产量是否在合理范围内。对投保农户，加载其田块所在位置的天气数据和土壤参数，逐年运行引擎，得到逐年产量预测序列。将农户上报的过去几年的产量序列与引擎预测的产量序列对比。如果农户上报产量长期低于引擎预测值，且偏差超过合理范围（如超过20%），说明该农户的产量损失可能不是气候因素导致的，而是管理不善、品种选择不当或土壤退化等因素。精算师可以据此剔除管理因素对保费定价的影响——保费只覆盖气候风险，管理风险由农户自行承担。</p>
+            <p>核赔环节的应用逻辑在于客观评估灾害年份的产量损失。触发赔付后，将当年实际天气数据输入引擎，输出当前年份的产量预测值。将正常年份（选取过去几年中气象条件正常的年份）的引擎产量预测值作为正常产量基准。产量损失率计算为正常产量减去灾害年产量，再除以正常产量。合理赔付金额计算为投保面积乘以正常产量乘以损失率乘以粮价。这一过程不依赖人工现场勘查，输出结果是基于生理模拟的客观数值。</p>
+
+            <h3>3.5 代码示例</h3>
+            <p>产量预估函数：</p>
+            <div class="code-block">def estimate_yield(genome_json, weather_dir, city, years, soil_params=None):
+    """
+    genome_json: 28维参数文件路径
+    weather_dir: 天气数据目录
+    city: 产区拼音
+    years: 年份列表, [2019, 2020, 2021, 2022]
+    soil_params: 土壤参数, dict或None
+    return: {year: grain_energy}
+    """
+    genome = json.load(open(genome_json))
+    all_seasons = build_all_seasons(weather_dir, city, years)
+    results = {}
+    for year, weather_data in all_seasons.items():
+        plant = CornPlant(genome)
+        soil = SimpleSoil(**(soil_params or {}))
+        soil.moisture = 0.30
+        for hour_data in weather_data:
+            plant.update(hour_data, soil)
+            if not plant.alive or plant.mature:
+                break
+        results[year] = plant.grain_energy
+    return results</div>
+            <p>赔付风险评估函数：</p>
+            <div class="code-block">def assess_loss(genome_json, weather_dir, city, disaster_year, normal_years):
+    """
+    genome_json: 参数文件
+    disaster_year: 灾害年份
+    normal_years: 正常年份列表
+    """
+    disaster_yield = estimate_yield(genome_json, weather_dir, city, [disaster_year])
+    normal_yields = estimate_yield(genome_json, weather_dir, city, normal_years)
+    normal_avg = sum(normal_yields.values()) / len(normal_yields)
+    loss_rate = (normal_avg - disaster_yield[disaster_year]) / normal_avg
+    return max(0, loss_rate)  # 损失率, 0-1</div>
+
+            <h3>3.6 验证方法</h3>
+            <p>买方精算团队可在自有历史数据上进行独立验证。</p>
+            <p>第一步，获取目标产区过去10-20年的逐小时天气数据，ERA5公开数据集免费提供。第二步，加载参数文件和天气数据，运行产量预估函数，输出逐年产量序列。第三步，获取同期该产区的县级产量统计或公司内部投保农户的产量序列。第四步，将引擎预测的产量序列与统计产量序列对比，计算均方根误差和决定系数。第五步，选取过去10-20年中实际发生极端气候事件的年份，对比引擎预测的产量损失率与实际赔付率。如果引擎预测的损失率和实际赔付率高度吻合，说明参数可以作为精算定价的依据。</p>
+            <p>验证的核心逻辑在于——不是验证参数是否正确，而是验证参数是否适用于目标产区的具体条件。如果目标产区的土壤、品种、管理方式与参数生成时的输入条件存在显著偏差，参数可能需要根据本地条件重新求解。这种偏差不是参数失效，而是输入条件变更，属于需要定制参数包的范畴。</p>
+        </section>
+
+        <!-- 第四章 -->
+        <section class="paper-section">
+            <h2>第四章 数字孪生与元宇宙接入</h2>
+
+            <h3>4.1 传统虚拟植物的底层缺陷</h3>
+            <p>当前数字孪生平台和元宇宙引擎中的虚拟植物，依赖两种互补的技术路线构建其视觉表象与生长过程。3D建模加关键帧动画负责视觉呈现：美术师根据真实植株的形态特征建立三维网格模型，动画师通过关键帧插值控制植株从幼苗到成熟的形态变化。L-system或分形算法负责程序化生成：通过预定义的文法规则和参数集，自动生成植株的分枝结构、叶片排列和花序分布。</p>
+            <p>这两条技术路线在各自的领域内表现优异，但将它们拼合在一起构建完整的虚拟植物时，一个根本性的断裂浮出表面。关键帧动画记录的是形态变化的时间序列，L-system文法描述的是形态变化的空间规则，但二者都不包含驱动形态变化的生理过程。一株虚拟玉米从拔节到抽穗的株高增长被预设为动画曲线上的几个控制点，而不是基于光合产物积累和茎秆伸长生长的动态模拟。叶片从绿变黄的过程被设定为材质参数的渐变，而不是基于氮素再动员和叶绿素降解的生理衰老。</p>
+            <p>这一断裂的后果在环境响应场景中暴露无遗。当虚拟环境中的光照强度降低时，一株真实的玉米会调整其光合效率、减少茎秆投资、延缓叶片衰老——这些策略是植格在求解存在时自主做出的。但基于关键帧动画的虚拟玉米不会做出任何响应：它的生长曲线在动画制作时就已经固定，无论虚拟环境中的光照、温度、降水如何变化，它的形态演变始终遵循预设的时间线。L-system同样无法弥补这一缺陷——文法规则可以生成逼真的静态形态，但规则的触发条件通常被设定为抽象的生长步数或迭代次数，而不是具体的光合速率、水分状况或氮素水平。</p>
+            <p>更深的断裂出现在群竞争层面。在真实的玉米田里，相邻植株之间持续进行着光竞争和根系竞争。一株被邻居遮挡的玉米，其光合收入低于开阔地带生长的同类，导致其株高投资策略发生变化——它可能会加大茎秆伸长投入以争夺光照，同时减少叶片投资以避免过度蒸腾。这种基于局部竞争的差异化响应，是群体涌现均衡策略的基础。然而，传统虚拟植物引擎中的每一株植株都是独立渲染的——它们之间不存在光资源的竞争分配，不存在根际水分和养分的竞争消耗。即使在同一片虚拟农田中放置了数百株玉米，它们在生理上仍然是互不相干的孤立个体。</p>
+
+            <h3>4.2 参数驱动的生理引擎</h3>
+            <p>这28个参数提供的是植物数字孪生的生理内核，区别于传统虚拟植物的视觉外壳。当参数文件被加载到引擎中，引擎在虚拟环境中创建的不是一株带有固定动画的3D模型，而是一个拥有完整生理状态的动态系统。这个系统的状态变量包括能量储备、水分含量、氮素浓度、叶面积指数、根系深度、株高、生物量、籽粒能量积累量。每一帧，引擎根据当前环境条件（虚拟光照、虚拟温度、虚拟降水、虚拟土壤水分）和植株当前状态，调用逐小时更新函数，计算下一时刻的状态。植株的形态变化——株高增长、叶面积扩展、根系下扎、叶片枯黄——是生理状态变化的可视化呈现，不是预设动画的播放。</p>
+            <p>以哈尔滨玉米为例，参数中<span class="code-inline">photo_base_rate</span>为0.28，<span class="code-inline">c4_photosynthesis_boost</span>为0.5。引擎在每个时间步计算光合作用：实际光合等于虚拟光照乘以叶面积乘以光竞争衰减系数，再乘以光合效率的C4加成。光竞争衰减系数不是固定值，而是当前植株叶面积和邻居植株叶面积的函数——引擎在每一帧遍历场景中所有植株，计算每株植株的局部光照条件。如果一株玉米被邻居遮挡，它的局部光照降低，光合收入下降，生长速率随之减缓。它会通过调整生物量分配来适应——增加茎秆投资以争夺光照，减少叶片投资以避免过度蒸腾。这些调整不是代码里写死的规则，而是植格在进化中自己收敛出来的策略——28个参数中的<span class="code-inline">stem_growth_alloc</span>（茎秆分配比例）和<span class="code-inline">leaf_growth_alloc</span>（叶片分配比例）决定了植株在不同光照条件下的投资倾向。</p>
+            <p>母体牺牲策略同样被完整编码。当植株进入灌浆后期，籽粒充實度超过<span class="code-inline">active_senescence_thresh</span>阈值时，引擎启动衰老动员程序。叶片中的氮素和可溶性糖被分解转运至籽粒，叶面积逐帧减少，叶片颜色从绿变黄。这不是材质参数的渐变，而是叶片生理状态变化驱动的视觉呈现。茎秆中储存的可溶性糖被动员释放，茎秆生物量下降，植株的抗倒伏能力同步减弱——引擎同步计算倒伏风险，并将倒伏状态反馈给物理引擎，影响植株的碰撞体积和视觉姿态。</p>
+
+            <h3>4.3 与L-system的对比</h3>
+            <p>L-system是虚拟植物形态生成的经典方法，其核心是一套递归重写规则。一个典型的玉米植株L-system文法包含数十条产生式规则，每条规则定义了特定器官在特定条件下的替换方式——茎尖分生组织如何产生节间和叶原基，叶原基如何发育为叶片，腋芽如何产生分枝。通过调整文法参数——节间长度、分枝角度、叶片尺寸——可以生成形态各异的植株个体。</p>
+            <p>L-system的优势在于它能从简单的文法规则出发，涌现出复杂的植株形态。一株包含数千个节间、叶片和花序的玉米，可以通过几百行文法规则生成。但这种生成方式的根本局限在于文法规则的结构是人为预设的，规则的触发条件被设定为生长步数或器官年龄，而不是生理状态。一株L-system生成的玉米在生长过程中不会因为缺水而调整节间长度，不会因为缺氮而减少叶片面积，不会因为被邻居遮挡而改变分枝角度——因为缺水、缺氮、遮阴这些生理条件不在L-system文法的词汇表中。</p>
+            <p>参数驱动的虚拟植物与L-system在不同层次上工作。L-system定义植株的形态发生规则，参数驱动植株的生理状态演变。二者可以互补——参数引擎输出植株的生理状态变量（株高、叶面积、根系深度、生物量、叶片氮含量），L-system根据这些生理变量调整形态生成参数。在这种架构下，L-system文法规则不变，但输入变量不再由预设的生长步数控制，而是由参数引擎输出的生理状态驱动。当植株缺水时，参数引擎输出的叶面积增长量减小，L-system据此生成更小的叶片。当植株缺氮时，参数引擎输出的叶片氮含量下降，L-system据此调整叶片颜色和纹理。形态变化不再是预设动画，而是生理状态的可视化映射。</p>
+
+            <h3>4.4 引擎集成接口</h3>
+            <p>参数文件为JSON格式，加载方式为<span class="code-inline">json.load()</span>。调用示例：</p>
+            <div class="code-block">with open('corn_haerbin_28d.json', 'r') as f:
+    genome = json.load(f)</div>
+            <p>逐小时更新函数的接口定义如下。输入为当前环境状态（虚拟光照、虚拟温度、虚拟降水、虚拟土壤水分）和植株当前状态（能量、水分、氮素、叶面积、根深、株高、生物量、籽粒能量）。输出为下一时刻的植株状态和决策指令（灌溉请求、追肥请求、完熟信号）。</p>
+            <div class="code-block">def update(genome, env, state, soil):
+    """
+    genome: 28维参数
+    env: {temp, precip, solar, humidity}
+    state: {energy, water, nitrogen, leaf_area, root_depth, height, biomass, grain_energy}
+    soil: {moisture, field_capacity, wilting_point}
+    return: (next_state, irrigation_requested, fertilization_requested, mature)
+    """</div>
+            <p>在虚拟场景中，每帧调用一次update函数。若多株植株共享同一引擎实例，需确保每株植株的状态独立存储。群体光竞争通过遍历邻居植株计算局部光照条件实现：</p>
+            <div class="code-block">def calculate_local_light(plant, neighbors):
+    lai = plant.leaf_area * plant_density / 667.0
+    total_shade = sum(n.leaf_area for n in neighbors) * neighbor_density / 667.0
+    effective_light = incident_solar * exp(-light_comp * (lai + total_shade))
+    return effective_light</div>
+            <p>形态渲染模块需订阅引擎输出的状态变量，在每帧更新时读取最新状态值，据此调整3D模型的形态参数——株高映射为模型缩放比例，叶面积映射为叶片网格的扩展或收缩，叶片氮含量映射为颜色和纹理参数。灌溉和追肥请求可触发视觉特效或UI提示。</p>
+            <p>验证方法同样简单直接：在虚拟环境中设定与哈尔滨2019-2022年一致的天气序列，加载参数文件，运行引擎。将引擎输出的株高、叶面积、产量变化曲线与公开文献中哈尔滨玉米的实测数据对比。如果形态演变趋势和最终产量符合生理常识，说明参数可以作为数字孪生的生理引擎使用。</p>
+        </section>
+
+        <!-- 第五章 -->
+        <section class="paper-section">
+            <h2>第五章 已发布参数包清单</h2>
+            <p>截至当前版本，参数包覆盖5个作物、18个产区。以下为完整的产区验证摘要。</p>
+
+            <h3>5.1 冬小麦参数包</h3>
+            <table class="paper-table">
+                <thead>
+                    <tr><th>产区</th><th>土壤</th><th>灌溉</th><th>追肥</th><th>四年完熟率</th><th>年均节省（元/亩）</th><th>极端测试覆盖</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>濮阳（黄淮冬麦区）</td><td>沙壤土</td><td>1次/年</td><td>3月29-30日一次</td><td>4/4</td><td>约130</td><td>2021年寒冬、2022年春旱</td></tr>
+                    <tr><td>保定（北部冬麦区）</td><td>沙壤土</td><td>1次/年</td><td>不追肥</td><td>4/4</td><td>约50</td><td>理想环境</td></tr>
+                    <tr><td>南京（长江中下游）</td><td>沙壤土</td><td>0次/年</td><td>不追肥</td><td>4/4</td><td>0（传统方案也无投入）</td><td>病害、倒伏、高温逼熟约束</td></tr>
+                    <tr><td>哈尔科夫（乌克兰黑土区）</td><td>黑钙土（有机质8-15%）</td><td>0次/年</td><td>不追肥</td><td>4/4</td><td>0（传统方案也无投入）</td><td>2020年春夏连旱</td></tr>
+                </tbody>
+            </table>
+            <p>南京与哈尔科夫涌现出"零灌溉、零追肥"策略，并非数据异常。南京降水充沛加上病害倒伏约束迫使植格降低株高和蒸腾，哈尔科夫黑钙土有机质含量极高、保水能力极强，自然肥力和储水能力足以支撑冬小麦全生育期需求。外部干预不会带来增产，只会增加成本。</p>
+
+            <h3>5.2 玉米参数包</h3>
+            <table class="paper-table">
+                <thead>
+                    <tr><th>产区</th><th>土壤</th><th>灌溉</th><th>追肥</th><th>四年完熟率</th><th>年均节省（元/亩）</th><th>极端测试覆盖</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>哈尔滨（东北春玉米区）</td><td>沙壤土</td><td>1次/年</td><td>不追肥</td><td>4/4</td><td>190</td><td>2018年低温</td></tr>
+                    <tr><td>濮阳（黄淮夏玉米区）</td><td>沙壤土</td><td>2次/年</td><td>不追肥</td><td>4/4</td><td>140</td><td>—</td></tr>
+                    <tr><td>南京（长江中下游）</td><td>沙壤土</td><td>1-2次/年</td><td>不追肥</td><td>4/4</td><td>165</td><td>—</td></tr>
+                    <tr><td>得梅因（美国玉米带）</td><td>黑土（有机质3-5%）</td><td>0次/年</td><td>不追肥</td><td>4/4</td><td>140</td><td>2012年夏季干旱</td></tr>
+                </tbody>
+            </table>
+            <p>哈尔滨玉米节省幅度最高，因其标准方案灌溉3次、追肥2次，模型策略只需灌溉1次，不追肥。得梅因黑土保水性强、自然肥力高，植格涌现出不灌溉、不追肥的策略，四年产量稳定在35.0附近。2012年干旱测试中，模型策略自动触发一次灌溉（成本50元），标准方案需2次灌溉加追肥（成本140元）。</p>
+
+            <h3>5.3 大豆参数包</h3>
+            <table class="paper-table">
+                <thead>
+                    <tr><th>产区</th><th>土壤</th><th>灌溉</th><th>追肥</th><th>四年完熟率</th><th>年均节省（元/亩）</th><th>极端测试覆盖</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>濮阳（黄淮大豆区）</td><td>沙壤土</td><td>3次/年</td><td>不追肥（固氮自给）</td><td>4/4</td><td>55</td><td>—</td></tr>
+                    <tr><td>保定（北部大豆区）</td><td>沙壤土</td><td>3次/年</td><td>不追肥（固氮自给）</td><td>4/4</td><td>55</td><td>—</td></tr>
+                    <tr><td>南京（长江中下游）</td><td>沙壤土</td><td>2次/年</td><td>不追肥（固氮自给）</td><td>4/4</td><td>95</td><td>—</td></tr>
+                    <tr><td>黑河（东北大豆区）</td><td>黑土</td><td>2次/年</td><td>不追肥（固氮自给）</td><td>0/4（积温不足）</td><td>95（灾害年止损）</td><td>2018年早霜</td></tr>
+                    <tr><td>库亚巴（巴西塞拉多）</td><td>酸性红壤（pH 4.5-5.5）</td><td>1次/年</td><td>不追肥（固氮自给）</td><td>4/4</td><td>140</td><td>2019年干旱</td></tr>
+                </tbody>
+            </table>
+            <p>黑河大豆四年均未完熟，这是积温不足的自然结果，不是模型缺陷。灾害年份模型策略自动缩减灌溉次数、不追肥，比北大荒标准方案少亏95元/亩——植株感知到低温导致代谢减缓，不再需要额外水肥。巴西塞拉多红壤酸性强、保水差、磷固定严重，是全球最具挑战性的大豆产区之一。耐铝毒属性和磷吸收效率被压到搜索空间上限附近，使植格能在酸性土壤中维持正常根系功能和固氮活性。</p>
+
+            <h3>5.4 水稻参数包</h3>
+            <table class="paper-table">
+                <thead>
+                    <tr><th>产区</th><th>土壤</th><th>灌溉</th><th>追肥</th><th>四年完熟率</th><th>年均节省（元/亩）</th><th>极端测试覆盖</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>哈尔滨（东北粳稻区）</td><td>淹水稻田</td><td>2次/年</td><td>不追肥</td><td>4/4</td><td>240</td><td>2018年低温</td></tr>
+                    <tr><td>长沙（长江中下游籼稻）</td><td>淹水稻田</td><td>2次/年</td><td>不追肥</td><td>4/4</td><td>240</td><td>—</td></tr>
+                    <tr><td>广州（华南热带籼稻）</td><td>淹水稻田</td><td>2次/年</td><td>不追肥</td><td>4/4</td><td>240</td><td>—</td></tr>
+                </tbody>
+            </table>
+            <p>水稻三地节省幅度一致（均为240元/亩），因为北大荒标准方案固定为灌溉5次加追肥3次，而植格在淹水环境下只需灌溉2次，氮素消耗极慢，不追肥。节省来自标准方案的刚性投入与实际需求之间的差额，这个差额在不同气候区高度一致。</p>
+
+            <h3>5.5 花生产品包</h3>
+            <table class="paper-table">
+                <thead>
+                    <tr><th>产区</th><th>土壤</th><th>灌溉</th><th>追肥</th><th>四年完熟率</th><th>年均节省（元/亩）</th><th>极端测试覆盖</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>濮阳（黄淮花生区）</td><td>沙壤土</td><td>2次/年</td><td>不追肥（固氮自给）</td><td>4/4</td><td>100</td><td>哈尔滨2018年低温</td></tr>
+                    <tr><td>保定（北部花生区）</td><td>沙壤土</td><td>2次/年</td><td>不追肥（固氮自给）</td><td>4/4</td><td>100</td><td>—</td></tr>
+                    <tr><td>南京（长江中下游）</td><td>沙壤土</td><td>2次/年</td><td>不追肥（固氮自给）</td><td>4/4</td><td>100</td><td>—</td></tr>
+                </tbody>
+            </table>
+            <p>花生三地策略高度一致——均为年均2次灌溉，不追肥，荚果能量25.0，年均节省100元/亩。花生依赖根瘤固氮自给自足，只浇水不追肥。三地气候差异在春夏季被压缩，涌现出的策略高度趋同。</p>
+
+            <h3>5.6 跨产区规律</h3>
+            <p>以上18个产区的数据揭示了策略涌现的深层逻辑。植格在不同环境中收敛出不同策略，但策略的差异恰好反映了环境约束的差异。华北平原和东北平原土壤条件接近但气候不同——哈尔滨玉米灌溉1次，濮阳玉米灌溉2次，因为濮阳夏季降水更少、蒸发更强。长江流域降水充沛——南京冬小麦和南京大豆灌溉需求均低于华北同作物。黑钙土有机质极高——哈尔科夫冬小麦和得梅因玉米均涌现出"不灌溉、不追肥"的策略，因为自然肥力已经足够。</p>
+            <p>这些涌现结果与农学常识高度吻合，但不同于传统经验——传统经验来自长期田间观察，这些参数来自存在本身的筛选。二者的趋同不是巧合，而是传统经验在无意中逼近了存在筛选的最优解。模型的价值在于它可以在没有传统经验的产区直接求解存在筛选的最优解。</p>
+
+            <h3>5.7 北大荒玉米作为唯一展开案例</h3>
+            <p>本指南中所有接入逻辑、所有代码示例、所有数据引用均以哈尔滨玉米为唯一案例。其他产区仅在本章参数包清单中以表格形式出现，不做展开。购买方可根据自身需求，参照哈尔滨玉米的接入方式类推至其他作物和产区。</p>
+        </section>
+
+        <!-- 附录 -->
+        <section class="paper-section">
+            <h2>附 术语对照</h2>
+            <p>以下列出本指南接入逻辑中直接涉及的15个属性名，每个一行工程定义。</p>
+            <table class="paper-table">
+                <thead>
+                    <tr><th>属性名</th><th>工程定义</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><span class="code-inline">photo_base_rate</span></td><td>基础光合速率。单位光照下单位叶面积的碳同化速率</td></tr>
+                    <tr><td><span class="code-inline">respiration_base</span></td><td>基础呼吸消耗。维持植株基本代谢的能量支出</td></tr>
+                    <tr><td><span class="code-inline">transpiration_per_leaf</span></td><td>单位叶面积蒸腾速率。水分通过气孔扩散的速率系数</td></tr>
+                    <tr><td><span class="code-inline">water_uptake_efficiency</span></td><td>根系吸水效率。单位根深从单位土壤有效水分中吸收水分的比例</td></tr>
+                    <tr><td><span class="code-inline">irrigation_trigger</span></td><td>灌溉触发阈值。植株体内水分低于此值时触发灌溉请求</td></tr>
+                    <tr><td><span class="code-inline">max_root_depth</span></td><td>最大根深。根系下扎的物理上限，单位米</td></tr>
+                    <tr><td><span class="code-inline">nitrogen_decay_rate</span></td><td>氮素消耗速率。植株体内氮素每小时消耗的比例</td></tr>
+                    <tr><td><span class="code-inline">max_height</span></td><td>最大株高。茎秆伸长生长的物理上限，单位米</td></tr>
+                    <tr><td><span class="code-inline">leaf_growth_alloc</span></td><td>叶片分配比例。净光合产物中分配给叶片生长的比例</td></tr>
+                    <tr><td><span class="code-inline">root_growth_alloc</span></td><td>根系分配比例。净光合产物中分配给根系生长的比例</td></tr>
+                    <tr><td><span class="code-inline">stem_growth_alloc</span></td><td>茎秆分配比例。净光合产物中分配给茎秆生长的比例</td></tr>
+                    <tr><td><span class="code-inline">grain_fill_allocation</span></td><td>灌浆分配比例。灌浆期光合产物中分配给籽粒的比例</td></tr>
+                    <tr><td><span class="code-inline">maturity_threshold</span></td><td>完熟阈值。籽粒能量积累达到此值时植株完熟</td></tr>
+                    <tr><td><span class="code-inline">leaf_senescence_rate</span></td><td>叶片衰老速率。灌浆期叶面积每日衰减的比例</td></tr>
+                    <tr><td><span class="code-inline">active_senescence_thresh</span></td><td>主动衰老触发点。籽粒充實度超过此值时启动母体牺牲程序</td></tr>
+                    <tr><td><span class="code-inline">c4_photosynthesis_boost</span></td><td>C4光合加成系数。玉米等高光效作物的额外光合效率倍率</td></tr>
+                </tbody>
+            </table>
+        </section>
     </main>
 
-    <footer>
-        <div class="footer-links">
-            <a href="../index.html">← 返回首页</a>
-            <a href="../institutional-inquiry.html">Institutional Inquiry</a>
-        </div>
-        <p>万植有格。The Foundation of Digital Plant Life.</p>
-        <p style="margin-top:0.5rem;">© 2026 Phyton</p>
+    <footer class="site-footer">
+        <p class="footer-slogan">万植有格。The Foundation of Digital Plant Life.</p>
+        <p class="footer-sub">Philosopher-Zhai</p>
+        <p class="footer-email">联系邮箱：<a href="mailto:phyton_zhai@outlook.com">phyton_zhai@outlook.com</a></p>
+        <p class="footer-copy">© 2026 植格 Phyton</p>
     </footer>
+
+    <script src="../js/map.js"></script>
 </body>
 </html>
