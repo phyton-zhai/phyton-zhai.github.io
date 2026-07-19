@@ -12,7 +12,9 @@
     "price_label": "¥100元",
     "is_premium": false,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "groundcover"
   },
   {
     "id": "玉米_haerbin",
@@ -27,7 +29,9 @@
     "price_label": "¥100元",
     "is_premium": false,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "冬小麦_kharkiv",
@@ -42,7 +46,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "冬小麦_baoding",
@@ -57,7 +63,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "冬小麦_nanjing",
@@ -72,7 +80,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "冬小麦_puyang",
@@ -87,7 +97,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "大豆_baoding",
@@ -102,7 +114,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "大豆_nanjing",
@@ -117,7 +131,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "大豆_cuiaba",
@@ -132,7 +148,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "大豆_puyang",
@@ -147,7 +165,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "水稻_haerbin",
@@ -162,7 +182,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "水稻_guangzhou",
@@ -177,7 +199,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "水稻_changsha",
@@ -192,7 +216,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "玉米_nanjing",
@@ -207,7 +233,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "玉米_puyang",
@@ -222,7 +250,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "玉米_des_moines",
@@ -237,7 +267,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "花生_baoding",
@@ -252,7 +284,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "花生_nanjing",
@@ -267,7 +301,9 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   },
   {
     "id": "花生_puyang",
@@ -282,6 +318,8 @@
     "price_label": "起拍价 ¥100万",
     "is_premium": true,
     "license_type": "独占授权（卖断）",
-    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。"
+    "rights_retained": "植格依据《著作权法》保留全部著作人身权，包括但不限于署名权、保护作品完整权。买方获得永久独占使用权。",
+    "sold": false,
+    "category": "crop"
   }
 ]
