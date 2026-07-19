@@ -128,7 +128,7 @@ function renderProductCard(product) {
     const soldClass = isSold ? ' sold' : '';
     const priceClass = isEntry ? ' entry' : '';
     const priceLabel = isSold ? '已售出' : product.price_label;
-    const targetUrl = isSold ? '#' : `product-detail.html?id=${encodeURIComponent(product.id)}`;
+    const targetUrl = isSold ? '#' : `product.html?id=${encodeURIComponent(product.id)}`;
 
     return `
         <a href="${targetUrl}" class="product-card${soldClass}" ${isSold ? 'aria-disabled="true"' : ''}>

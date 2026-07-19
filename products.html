@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物种目录 — 植格 Phyton</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, 'Inter', 'Helvetica Neue', 'Segoe UI', Roboto, sans-serif;
+            background: #f7f6f3;
+            color: #1e1e1e;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== 顶部导航 ===== */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px) saturate(1.2);
+            -webkit-backdrop-filter: blur(18px) saturate(1.2);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+        }
+
+        .nav-logo {
+            font-size: 1.3rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.8rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.75rem;
+            font-weight: 450;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #3a3a3a;
+            text-decoration: none;
+            transition: color 0.25s ease;
+        }
+
+        .nav-link:hover {
+            color: #000;
+        }
+
+        /* ===== 主内容 ===== */
+        .catalog-page {
+            max-width: 1000px;
+            margin: 2.5rem auto 1.5rem;
+            padding: 0 2rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .catalog-page h1 {
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 0.3rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .catalog-subtitle {
+            text-align: center;
+            font-size: 0.78rem;
+            color: #b8b3ab;
+            letter-spacing: 1.5px;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ===== 分类区块 ===== */
+        .catalog-category {
+            margin-bottom: 2.5rem;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .category-icon {
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        .category-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            color: #1a1a1a;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .category-count {
+            font-size: 0.7rem;
+            color: #b8b3ab;
+            letter-spacing: 0.5px;
+            margin-left: 0.2rem;
+        }
+
+        /* ===== 卡片网格 ===== */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .product-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 70px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        /* 已售出卡片 */
+        .product-card.sold {
+            opacity: 0.4;
+            pointer-events: none;
+            filter: grayscale(0.5);
+        }
+
+        /* 卡片内容 */
+        .card-region {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #1a1a1a;
+            letter-spacing: 0.3px;
+            margin-bottom: 0.15rem;
+        }
+
+        .card-crop-hint {
+            font-size: 0.7rem;
+            color: #b8b3ab;
+            letter-spacing: 0.3px;
+            line-height: 1.4;
+        }
+
+        .card-price {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-top: 0.2rem;
+        }
+
+        .card-price.entry {
+            color: #2c5f2d;
+        }
+
+        .card-arrow {
+            font-size: 0.6rem;
+            color: #ccc7bf;
+            margin-top: 0.3rem;
+            align-self: flex-end;
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover .card-arrow {
+            transform: translateX(3px);
+        }
+
+        /* 已售标记 */
+        .card-sold-tag {
+            font-size: 0.6rem;
+            color: #b8b3ab;
+            margin-top: 0.15rem;
+        }
+
+        /* ===== 空分类 ===== */
+        .empty-category {
+            font-size: 0.78rem;
+            color: #c5c0b8;
+            padding: 0.5rem 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== 底部注脚 ===== */
+        .catalog-footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #c5c0b8;
+            margin-top: 2.5rem;
+            letter-spacing: 0.8px;
+        }
+
+        /* ===== 页脚 ===== */
+        .site-footer {
+            text-align: center;
+            padding: 2.2rem 2rem 1.8rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            margin-top: 2rem;
+            background: #fcfcfb;
+        }
+
+        .footer-slogan {
+            font-size: 0.9rem;
+            font-weight: 380;
+            letter-spacing: 2px;
+            color: #1a1a1a;
+            margin-bottom: 0.15rem;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .footer-sub {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: #b8b3ab;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-email {
+            font-size: 0.65rem;
+            color: #bfb9b1;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.6rem;
+        }
+        .footer-email a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-email a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-copy {
+            font-size: 0.65rem;
+            color: #ccc7bf;
+            letter-spacing: 1px;
+        }
+
+        /* ===== 响应式微调 ===== */
+        @media (max-width: 600px) {
+            .product-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+            .product-card {
+                padding: 0.5rem 0.7rem;
+                min-height: 60px;
+            }
+            .card-region {
+                font-size: 0.8rem;
+            }
+            .card-crop-hint {
+                font-size: 0.65rem;
+            }
+            .nav-menu {
+                gap: 1rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 加载占位 */
+        .loading-placeholder {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #b8b3ab;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">植格</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="products.html" class="nav-link">产品目录</a></li>
+                <li class="nav-item"><a href="auction.html" class="nav-link">竞拍规则</a></li>
+                <li class="nav-item"><a href="institutional-inquiry.html" class="nav-link">机构咨询</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">关于植格</a></li>
+                <li class="nav-item"><a href="tech/index.html" class="nav-link">技术白皮书</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="catalog-page">
+        <h1>物种目录</h1>
+        <p class="catalog-subtitle">植物界的数字孪生基座</p>
+
+        <div id="catalog-content">
+            <div class="loading-placeholder">加载中…</div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p class="footer-slogan">万植有格。The Foundation of Digital Plant Life.</p>
+        <p class="footer-sub">Philosopher-Zhai</p>
+        <p class="footer-email">联系邮箱：<a href="mailto:phyton_zhai@outlook.com">phyton_zhai@outlook.com</a></p>
+        <p class="footer-copy">© 2026 植格 Phyton</p>
+    </footer>
+
+    <script>
+        // 种植区划提示映射
+        const regionHints = {
+            // 冬小麦
+            '冬小麦_puyang': '黄淮冬麦区 · 冬性小麦',
+            '冬小麦_baoding': '北部冬麦区 · 冬性小麦',
+            '冬小麦_nanjing': '长江中下游冬麦区 · 半冬性小麦',
+            '冬小麦_kharkiv': '东欧黑土带 · 冬性小麦',
+            // 玉米
+            '玉米_haerbin': '东北春玉米区 · 一年一熟',
+            '玉米_puyang': '黄淮海夏玉米区 · 一年两熟',
+            '玉米_nanjing': '长江中下游夏玉米区 · 一年两熟',
+            '玉米_des_moines': '美国玉米带 · 一年一熟',
+            // 大豆
+            '大豆_puyang': '黄淮海夏大豆区 · 一年两熟',
+            '大豆_baoding': '黄淮海夏大豆区 · 一年两熟',
+            '大豆_nanjing': '长江流域夏大豆区 · 一年两熟',
+            '大豆_cuiaba': '巴西塞拉多热带大豆区 · 酸性红壤',
+            // 花生
+            '花生_puyang': '黄淮海花生区 · 春花生',
+            '花生_baoding': '黄淮海花生区 · 春花生',
+            '花生_nanjing': '长江流域花生区 · 春花生',
+            // 水稻
+            '水稻_haerbin': '东北粳稻区 · 一季稻',
+            '水稻_changsha': '长江中下游籼稻区 · 双季稻',
+            '水稻_guangzhou': '华南籼稻区 · 双季稻',
+            // 小蓬草
+            '小蓬草_erigeron': '小蓬草 · 全球广布入侵种',
+        };
+
+        // 作物图标映射
+        const cropIcons = {
+            '冬小麦': '🌾',
+            '玉米': '🌽',
+            '大豆': '🫘',
+            '花生': '🥜',
+            '水稻': '🍚',
+            '小蓬草': '🌿',
+        };
+
+        // 分类定义：按三大类分组
+        const categoryDefs = [
+            { id: 'crop', icon: '🌾', name: '作物', cropList: ['冬小麦', '玉米', '大豆', '花生', '水稻'] },
+            { id: 'groundcover', icon: '🌿', name: '地被', cropList: ['小蓬草'] },
+            { id: 'other', icon: '🌳', name: '其他', cropList: [] },
+        ];
+
+        async function loadCatalog() {
+            const container = document.getElementById('catalog-content');
+            try {
+                const resp = await fetch('data/products.json');
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const products = await resp.json();
+
+                if (!products.length) {
+                    container.innerHTML = '<p style="text-align:center;color:var(--muted);padding:3rem;">产品目录即将上线，敬请期待。</p>';
+                    return;
+                }
+
+                let html = '';
+
+                categoryDefs.forEach(cat => {
+                    // 筛选该分类下的产品
+                    let catProducts;
+                    if (cat.id === 'crop') {
+                        catProducts = products.filter(p => cat.cropList.includes(p.crop));
+                    } else if (cat.id === 'groundcover') {
+                        catProducts = products.filter(p => cat.cropList.includes(p.crop));
+                    } else {
+                        catProducts = [];
+                    }
+
+                    html += `
+                        <section class="catalog-category">
+                            <div class="category-header">
+                                <span class="category-icon">${cat.icon}</span>
+                                <span class="category-name">${cat.name}</span>
+                                <span class="category-count">${catProducts.length}</span>
+                            </div>
+                    `;
+
+                    if (catProducts.length > 0) {
+                        if (cat.id === 'crop') {
+                            // 作物：按物种子分组
+                            cat.cropList.forEach(species => {
+                                const speciesProducts = catProducts.filter(p => p.crop === species);
+                                if (speciesProducts.length === 0) return;
+                                html += `
+                                    <div class="species-group" style="margin-bottom:1.2rem;">
+                                        <div class="species-group-title" style="font-size:0.75rem;font-weight:500;letter-spacing:1px;color:#8a8a8a;margin-bottom:0.4rem;">${cropIcons[species] || ''} ${species}</div>
+                                        <div class="product-grid">
+                                            ${speciesProducts.map(p => renderCard(p)).join('')}
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                        } else {
+                            // 地被：直接平铺
+                            html += `
+                                <div class="product-grid">
+                                    ${catProducts.map(p => renderCard(p)).join('')}
+                                </div>
+                            `;
+                        }
+                    } else {
+                        html += '<p class="empty-category">— 暂无已发布参数包 —</p>';
+                    }
+
+                    html += '</section>';
+                });
+
+                html += '<p class="catalog-footer">更多物种正在求解中</p>';
+                container.innerHTML = html;
+
+            } catch (err) {
+                console.error('加载产品数据失败:', err);
+                container.innerHTML = '<p style="text-align:center;color:var(--muted);padding:3rem;">产品数据加载失败。</p>';
+            }
+        }
+
+        function renderCard(product) {
+            const isSold = product.sold === true;
+            const isEntry = product.price === 100;
+            const hint = regionHints[product.id] || product.region_cn;
+            const soldClass = isSold ? ' sold' : '';
+            const priceClass = isEntry ? ' entry' : '';
+            const priceLabel = isSold ? '已售出' : (isEntry ? '¥100' : '竞拍');
+            const targetUrl = isSold ? '#' : `product.html?id=${encodeURIComponent(product.id)}`;
+
+            return `
+                <a href="${targetUrl}" class="product-card${soldClass}" ${isSold ? 'aria-disabled="true"' : ''}>
+                    <div class="card-region">${product.region_cn}</div>
+                    <div class="card-crop-hint">${hint}</div>
+                    <span class="card-price${priceClass}">${priceLabel}</span>
+                    ${isSold ? '<span class="card-sold-tag">已售出</span>' : '<span class="card-arrow">→</span>'}
+                </a>
+            `;
+        }
+
+        loadCatalog();
+    </script>
+</body>
+</html>
