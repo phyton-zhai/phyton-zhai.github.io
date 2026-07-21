@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>物种目录 — 植格 Phyton</title>
+    <link rel="stylesheet" href="css/style.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            overflow-y: scroll;
         }
 
         body {
@@ -22,7 +27,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ===== 顶部导航 — 与 About 页面完全一致 ===== */
         .top-nav {
             background: rgba(255, 255, 255, 0.72);
             backdrop-filter: blur(18px) saturate(1.2);
@@ -59,6 +63,10 @@
             align-items: center;
         }
 
+        .nav-menu li {
+            display: block;
+        }
+
         .nav-link {
             font-size: 0.8rem;
             font-weight: 450;
@@ -89,7 +97,6 @@
             color: #000;
         }
 
-        /* ===== 主内容 ===== */
         .catalog-page {
             max-width: 1000px;
             margin: 2.5rem auto 1.5rem;
@@ -116,7 +123,6 @@
             margin-bottom: 2.5rem;
         }
 
-        /* ===== 分类区块 ===== */
         .catalog-category {
             margin-bottom: 2.5rem;
         }
@@ -150,7 +156,6 @@
             margin-left: 0.2rem;
         }
 
-        /* ===== 卡片网格 ===== */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -178,14 +183,12 @@
             border-color: rgba(0, 0, 0, 0.08);
         }
 
-        /* 已售出卡片 */
         .product-card.sold {
             opacity: 0.4;
             pointer-events: none;
             filter: grayscale(0.5);
         }
 
-        /* 卡片内容 */
         .card-region {
             font-weight: 500;
             font-size: 0.9rem;
@@ -224,14 +227,12 @@
             transform: translateX(3px);
         }
 
-        /* 已售标记 */
         .card-sold-tag {
             font-size: 0.6rem;
             color: #b8b3ab;
             margin-top: 0.15rem;
         }
 
-        /* ===== 空分类 ===== */
         .empty-category {
             font-size: 0.78rem;
             color: #c5c0b8;
@@ -239,7 +240,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== 底部注脚 ===== */
         .catalog-footer {
             text-align: center;
             font-size: 0.7rem;
@@ -248,7 +248,6 @@
             letter-spacing: 0.8px;
         }
 
-        /* ===== 页脚 ===== */
         .site-footer {
             text-align: center;
             padding: 2.2rem 2rem 1.8rem;
@@ -294,7 +293,6 @@
             letter-spacing: 1px;
         }
 
-        /* ===== 响应式微调 ===== */
         @media (max-width: 700px) {
             .top-nav {
                 padding: 0 1rem;
@@ -378,36 +376,28 @@
     </footer>
 
     <script>
-        // 种植区划提示映射
         const regionHints = {
-            // 冬小麦
             '冬小麦_puyang': '黄淮冬麦区 · 冬性小麦',
             '冬小麦_baoding': '北部冬麦区 · 冬性小麦',
             '冬小麦_nanjing': '长江中下游冬麦区 · 半冬性小麦',
             '冬小麦_kharkiv': '东欧黑土带 · 冬性小麦',
-            // 玉米
             '玉米_haerbin': '东北春玉米区 · 一年一熟',
             '玉米_puyang': '黄淮海夏玉米区 · 一年两熟',
             '玉米_nanjing': '长江中下游夏玉米区 · 一年两熟',
             '玉米_des_moines': '美国玉米带 · 一年一熟',
-            // 大豆
             '大豆_puyang': '黄淮海夏大豆区 · 一年两熟',
             '大豆_baoding': '黄淮海夏大豆区 · 一年两熟',
             '大豆_nanjing': '长江流域夏大豆区 · 一年两熟',
             '大豆_cuiaba': '巴西塞拉多热带大豆区 · 酸性红壤',
-            // 花生
             '花生_puyang': '黄淮海花生区 · 春花生',
             '花生_baoding': '黄淮海花生区 · 春花生',
             '花生_nanjing': '长江流域花生区 · 春花生',
-            // 水稻
             '水稻_haerbin': '东北粳稻区 · 一季稻',
             '水稻_changsha': '长江中下游籼稻区 · 双季稻',
             '水稻_guangzhou': '华南籼稻区 · 双季稻',
-            // 小蓬草
             '小蓬草_erigeron': '小蓬草 · 全球广布入侵种',
         };
 
-        // 作物图标映射
         const cropIcons = {
             '冬小麦': '🌾',
             '玉米': '🌽',
@@ -417,7 +407,6 @@
             '小蓬草': '🌿',
         };
 
-        // 分类定义：按三大类分组
         const categoryDefs = [
             { id: 'crop', icon: '🌾', name: '作物', cropList: ['冬小麦', '玉米', '大豆', '花生', '水稻'] },
             { id: 'groundcover', icon: '🌿', name: '地被', cropList: ['小蓬草'] },
@@ -439,7 +428,6 @@
                 let html = '';
 
                 categoryDefs.forEach(cat => {
-                    // 筛选该分类下的产品
                     let catProducts;
                     if (cat.id === 'crop') {
                         catProducts = products.filter(p => cat.cropList.includes(p.crop));
@@ -460,7 +448,6 @@
 
                     if (catProducts.length > 0) {
                         if (cat.id === 'crop') {
-                            // 作物：按物种子分组
                             cat.cropList.forEach(species => {
                                 const speciesProducts = catProducts.filter(p => p.crop === species);
                                 if (speciesProducts.length === 0) return;
@@ -474,7 +461,6 @@
                                 `;
                             });
                         } else {
-                            // 地被：直接平铺
                             html += `
                                 <div class="product-grid">
                                     ${catProducts.map(p => renderCard(p)).join('')}

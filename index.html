@@ -6,9 +6,6 @@
     <title>植格 Phyton — 植物界的数字孪生基座</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* ============================================================
-           全局 — 科技白左风
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -16,10 +13,7 @@
         }
 
         html {
-            overflow-y: scroll;   
-        }
-
-        html {
+            overflow-y: scroll;
             scroll-behavior: smooth;
         }
 
@@ -28,21 +22,21 @@
             background: #f7f6f3;
             color: #1e1e1e;
             line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ===== 顶部导航 — 毛玻璃 ===== */
         .top-nav {
             background: rgba(255, 255, 255, 0.72);
             backdrop-filter: blur(18px) saturate(1.2);
             -webkit-backdrop-filter: blur(18px) saturate(1.2);
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             padding: 0 2rem;
-            position: fixed;
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
+            z-index: 100;
         }
 
         .nav-inner {
@@ -68,6 +62,10 @@
             list-style: none;
             gap: 2.2rem;
             align-items: center;
+        }
+
+        .nav-menu li {
+            display: block;
         }
 
         .nav-link {
@@ -100,43 +98,8 @@
             color: #000;
         }
 
-        .has-dropdown {
-            position: relative;
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 14px;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
-            min-width: 200px;
-            padding: 0.5rem 0;
-        }
-
-        .has-dropdown:hover .dropdown {
-            display: block;
-        }
-
-        .dropdown-inner {
-            padding: 0.5rem 1rem;
-        }
-
-        /* ===== 滚动容器 ===== */
-        .scroll-container {
-            padding-top: 64px;
-            padding-bottom: 200px; /* 为固定页脚预留空间 */
-        }
-
-        /* ===== 全屏面板 ===== */
         .fullscreen-panel {
-            min-height: 100vh;
+            min-height: calc(100vh - 64px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -144,16 +107,12 @@
             width: 100%;
         }
 
-        /* ============================================================
-           第一屏：英雄区（纯文字，垂直居中）
-           ============================================================ */
         .hero-panel {
             background: #f7f6f3;
             text-align: center;
             flex-direction: column;
-            position: relative;
-            min-height: 100vh;
             align-items: center;
+            position: relative;
         }
 
         .hero-overlay {
@@ -208,27 +167,14 @@
         }
 
         @keyframes bounce-down {
-            0%,
-            100% {
-                transform: translateX(-50%) translateY(0);
-                opacity: 0.4;
-            }
-            50% {
-                transform: translateX(-50%) translateY(10px);
-                opacity: 1;
-            }
+            0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.4; }
+            50% { transform: translateX(-50%) translateY(10px); opacity: 1; }
         }
 
-        /* ============================================================
-           第二屏：故事卡片（顶部对齐，但足够的内边距保证视觉居中）
-           ============================================================ */
         .stories-panel {
             background: #f7f6f3;
+            align-items: flex-start;
             padding: 5rem 2rem 4rem;
-            min-height: 100vh;
-            display: flex;
-            align-items: flex-start;   /* 保持顶部对齐，符合您之前的要求 */
-            justify-content: center;
         }
 
         .stories-inner {
@@ -312,16 +258,10 @@
             flex: 1;
         }
 
-        /* ============================================================
-           第三屏：全球覆盖（底部内边距已减小，页脚脱离文档流）
-           ============================================================ */
         .climate-panel {
             background: #f7f6f3;
-            padding: 5rem 2rem 3rem;   /* 底部内边距减小 */
-            min-height: 100vh;
-            display: flex;
+            padding: 5rem 2rem 3rem;
             align-items: flex-start;
-            justify-content: center;
             text-align: center;
         }
 
@@ -360,22 +300,12 @@
             margin: 0 auto;
         }
 
-        /* ============================================================
-           页脚 — 固定于视口底部
-           ============================================================ */
         .site-footer {
-            position: fixed;            /* 固定定位 */
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 900;               /* 低于导航栏 */
             text-align: center;
             padding: 2rem 2rem 1.6rem;
             border-top: 1px solid rgba(0, 0, 0, 0.05);
-            background: rgba(252, 252, 251, 0.96);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.03);
+            background: #fcfcfb;
+            margin-top: auto;
         }
 
         .footer-slogan {
@@ -394,7 +324,6 @@
             margin-bottom: 1.2rem;
         }
 
-        /* ===== 新增：邮箱样式 ===== */
         .footer-email {
             font-size: 0.7rem;
             color: #bfb9b1;
@@ -426,9 +355,6 @@
             letter-spacing: 1px;
         }
 
-        /* ============================================================
-           响应式
-           ============================================================ */
         @media (max-width: 900px) {
             .story-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -487,11 +413,6 @@
                 font-size: 0.88rem;
             }
 
-            /* 移动端底部留白加大，页脚更高 */
-            .scroll-container {
-                padding-bottom: 230px;
-            }
-
             .climate-panel {
                 padding: 4rem 1.2rem 2.5rem;
             }
@@ -540,15 +461,7 @@
 
             .fullscreen-panel {
                 padding: 3rem 1rem;
-                min-height: 90vh;
-            }
-            .stories-panel {
-                min-height: auto;
-                padding: 3rem 1rem 2rem;
-            }
-            .climate-panel {
-                min-height: auto;
-                padding: 3rem 1rem 2rem;
+                min-height: calc(90vh - 64px);
             }
 
             .story-text h3 {
@@ -566,11 +479,6 @@
                 bottom: 1.2rem;
             }
 
-            /* 小屏幕底部留白更多 */
-            .scroll-container {
-                padding-bottom: 250px;
-            }
-
             .site-footer {
                 padding: 1.4rem 1rem 1.2rem;
             }
@@ -579,91 +487,72 @@
 </head>
 <body>
 
-    <!-- ===== 顶部悬浮导航栏 ===== -->
     <nav class="top-nav">
         <div class="nav-inner">
             <a href="index.html" class="nav-logo">植格</a>
             <ul class="nav-menu">
-                <li class="nav-item"><a href="products.html" class="nav-link">产品目录</a></li>
-                <li class="nav-item">
-                    <a href="auction.html" class="nav-link">竞拍规则</a>
-                </li>
-                <li class="nav-item">
-                    <a href="institutional-inquiry.html" class="nav-link">机构咨询</a>
-                </li>
-                <li class="nav-item">
-                    <a href="about.html" class="nav-link">关于植格</a>
-                </li>
-                <li class="nav-item">
-                    <a href="tech/index.html" class="nav-link">技术白皮书</a>
-                </li>
+                <li><a href="products.html" class="nav-link">产品目录</a></li>
+                <li><a href="auction.html" class="nav-link">竞拍规则</a></li>
+                <li><a href="institutional-inquiry.html" class="nav-link">机构咨询</a></li>
+                <li><a href="about.html" class="nav-link">关于植格</a></li>
+                <li><a href="tech/index.html" class="nav-link">技术白皮书</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- ===== 全屏滚动容器 ===== -->
-    <div class="scroll-container">
+    <section class="fullscreen-panel hero-panel" id="panel1">
+        <div class="hero-overlay">
+            <h1 class="hero-title">万植有格</h1>
+            <p class="hero-subtitle">创造植物界的数字孪生基座</p>
+            <p class="hero-tagline">这不是优化。这是范式转换。</p>
+            <p class="hero-byline">Philosopher-Zhai</p>
+        </div>
+        <div class="scroll-hint">↓</div>
+    </section>
 
-        <!-- 第一屏：英雄区 -->
-        <section class="fullscreen-panel hero-panel" id="panel1">
-            <div class="hero-overlay">
-                <h1 class="hero-title">万植有格</h1>
-                <p class="hero-subtitle">创造植物界的数字孪生基座</p>
-                <p class="hero-tagline">这不是优化。这是范式转换。</p>
-                <p class="hero-byline">Philosopher-Zhai</p>
-            </div>
-            <div class="scroll-hint">↓</div>
-        </section>
-
-        <!-- 第二屏：三张故事卡片 -->
-        <section class="fullscreen-panel stories-panel" id="panel2">
-            <div class="stories-inner">
-                <h2 class="stories-heading">涌现：植物自己求解的生存策略</h2>
-                <div class="story-grid">
-                    <div class="story-card">
-                        <div class="story-img" style="background-image: url('images/story_black_soil.jpg');"></div>
-                        <div class="story-text">
-                            <h3>黑土区冬小麦的零干预策略</h3>
-                            <p class="story-tagline">当最优解是不作为</p>
-                            <p class="story-desc">乌克兰黑土区有机质含量高达8%-15%。植格引擎在四年回测中涌现的策略是：不灌溉、不追肥。在这片土地上，任何人为干预都是多余的。</p>
-                        </div>
+    <section class="fullscreen-panel stories-panel" id="panel2">
+        <div class="stories-inner">
+            <h2 class="stories-heading">涌现：植物自己求解的生存策略</h2>
+            <div class="story-grid">
+                <div class="story-card">
+                    <div class="story-img" style="background-image: url('images/story_black_soil.jpg');"></div>
+                    <div class="story-text">
+                        <h3>黑土区冬小麦的零干预策略</h3>
+                        <p class="story-tagline">当最优解是不作为</p>
+                        <p class="story-desc">乌克兰黑土区有机质含量高达8%-15%。植格引擎在四年回测中涌现的策略是：不灌溉、不追肥。在这片土地上，任何人为干预都是多余的。</p>
                     </div>
-                    <div class="story-card">
-                        <div class="story-img" style="background-image: url('images/story_disaster.jpg');"></div>
-                        <div class="story-text">
-                            <h3>灾害气候下的理性止损</h3>
-                            <p class="story-tagline">减少无效投入的逆向决策</p>
-                            <p class="story-desc">2018年黑河大豆遭遇低温，传统方案加大水肥投入抢救，最终仍未完熟。植格策略选择了减少投入——代谢慢了，水肥需求自然下降。省下的成本直接转化为净收益。</p>
-                        </div>
+                </div>
+                <div class="story-card">
+                    <div class="story-img" style="background-image: url('images/story_disaster.jpg');"></div>
+                    <div class="story-text">
+                        <h3>灾害气候下的理性止损</h3>
+                        <p class="story-tagline">减少无效投入的逆向决策</p>
+                        <p class="story-desc">2018年黑河大豆遭遇低温，传统方案加大水肥投入抢救，最终仍未完熟。植格策略选择了减少投入——代谢慢了，水肥需求自然下降。省下的成本直接转化为净收益。</p>
                     </div>
-                    <div class="story-card">
-                        <div class="story-img" style="background-image: url('images/story_senescence.jpg');"></div>
-                        <div class="story-text">
-                            <h3>灌浆期营养器官的程序性衰解</h3>
-                            <p class="story-tagline">一年生植物的终极生存策略</p>
-                            <p class="story-desc">灌浆启动后，植格主动将叶片和茎秆中约15%的储存物质以57%的效率输送给籽粒。这不是病害，不是衰老，是植物在繁殖信号触发下自主执行的程序性营养转移。</p>
-                        </div>
+                </div>
+                <div class="story-card">
+                    <div class="story-img" style="background-image: url('images/story_senescence.jpg');"></div>
+                    <div class="story-text">
+                        <h3>灌浆期营养器官的程序性衰解</h3>
+                        <p class="story-tagline">一年生植物的终极生存策略</p>
+                        <p class="story-desc">灌浆启动后，植格主动将叶片和茎秆中约15%的储存物质以57%的效率输送给籽粒。这不是病害，不是衰老，是植物在繁殖信号触发下自主执行的程序性营养转移。</p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 第三屏：全球覆盖 -->
-        <section class="fullscreen-panel climate-panel" id="panel3">
-            <div class="climate-inner">
-                <h2 class="climate-heading">全球覆盖</h2>
-                <img src="images/climate_map.png" alt="植格全球覆盖产区示意图" class="climate-map">
-                <p class="climate-note">基于ECMWF全球再分析数据 · 已覆盖九个核心产区 · 跨越六种气候类型 · 跨五个物种</p>
-            </div>
-        </section>
+    <section class="fullscreen-panel climate-panel" id="panel3">
+        <div class="climate-inner">
+            <h2 class="climate-heading">全球覆盖</h2>
+            <img src="images/climate_map.png" alt="植格全球覆盖产区示意图" class="climate-map">
+            <p class="climate-note">基于ECMWF全球再分析数据 · 已覆盖九个核心产区 · 跨越六种气候类型 · 跨五个物种</p>
+        </div>
+    </section>
 
-    </div>
-
-    <!-- ===== 页脚（固定底部） ===== -->
     <footer class="site-footer">
         <p class="footer-slogan">万植有格。The Foundation of Digital Plant Life.</p>
         <p class="footer-sub">Philosopher-Zhai</p>
-        <!-- ===== 新增：邮箱链接 ===== -->
         <p class="footer-email">联系邮箱：<a href="mailto:phyton_zhai@outlook.com">phyton_zhai@outlook.com</a></p>
         <p class="footer-disclaimer">
             植格参数引擎所使用的一切数据均来自全球公开可获取的科学数据源。气象数据来自ECMWF ERA5，土壤数据来自FAO HWSD及各国公开土壤普查资料，植物生理属性基于公开文献由植格引擎自主推演。本参数包是基于公开数据的科学推演结果，不包含任何国家机密、商业秘密或个人隐私数据。
