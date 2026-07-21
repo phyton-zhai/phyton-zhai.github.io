@@ -20,6 +20,7 @@
             display: flex;
             flex-direction: column;
             -webkit-font-smoothing: antialiased;
+            overflow-y: scroll; /* 新增：强制滚动条始终占位，消除页面偏移 */
         }
 
         /* ===== 顶部导航 — 与 About 页面完全一致 ===== */
@@ -40,13 +41,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 64px;          /* 改为 64px，与 About 一致 */
+            height: 64px;
         }
 
         .nav-logo {
-            font-size: 1.4rem;      /* 改为 1.4rem，与 About 一致 */
+            font-size: 1.4rem;
             font-weight: 500;
-            letter-spacing: 4px;     /* 改为 4px，与 About 一致 */
+            letter-spacing: 4px;
             color: #1a1a1a;
             text-decoration: none;
             font-family: 'Times New Roman', serif;
@@ -55,22 +56,21 @@
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 2.2rem;            /* 改为 2.2rem，与 About 一致 */
+            gap: 2.2rem;
             align-items: center;
         }
 
         .nav-link {
-            font-size: 0.8rem;       /* 改为 0.8rem，与 About 一致 */
+            font-size: 0.8rem;
             font-weight: 450;
-            letter-spacing: 0.8px;   /* 改为 0.8px，与 About 一致 */
+            letter-spacing: 0.8px;
             text-transform: uppercase;
             color: #3a3a3a;
             text-decoration: none;
             transition: color 0.25s ease;
-            position: relative;      /* 新增，为 ::after 定位 */
+            position: relative;
         }
 
-        /* ===== 新增：悬停下划线滑入效果，与 About 一致 ===== */
         .nav-link::after {
             content: '';
             position: absolute;
